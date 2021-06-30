@@ -1,0 +1,6 @@
+Host: justthetalk.com
+User-agent: *
+Disallow: /admin/
+Disallow: /personal/
+Disallow: /mod/
+Disallow: /userspace/

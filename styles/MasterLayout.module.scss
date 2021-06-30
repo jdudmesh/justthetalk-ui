@@ -1,0 +1,96 @@
+// This file is part of the JUSTtheTalkUI distribution (https://github.com/jdudmesh/justthetalk-ui).
+// Copyright (c) 2021 John Dudmesh.
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, version 3.
+// This program is distributed in the hope that it will be useful, but
+// WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+// General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
+.mainContent {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.folderList {
+    width: 192px;
+    ul {
+        margin-block-start: 0;
+    }
+}
+
+.leftColumn {
+    position: relative;
+    flex: 1;
+}
+
+.centreColumn {
+    position: relative;
+    width: clamp(45ch, 50%, 75ch);
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.rightColumn {
+    position: relative;
+    flex: 1;
+}
+
+.rightColumnContent {
+    margin-bottom: 10px;
+    padding-top: 10px;
+}
+
+.appTitle {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+}
+
+.appBarIcon {
+    color: white;
+}
+
+.linksList {
+    margin-block-start: 0;
+    padding-inline-start: 0;
+    li {
+        list-style: none;
+        line-height: 1.25rem;
+        margin-bottom: 5px;
+    }
+}
+
+.drawerClose {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.drawerContent {
+    padding: 10px;
+}
+
+.narrowWidthLoginButtons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding-bottom: 10px;
+    ;
+}
+
+.bigContent {
+    li {
+        margin-bottom: 24px;
+        font-size: 24px;
+    }
+}
+
+.standardContent {
+    li {
+        font-size: inherit;
+    }
+}

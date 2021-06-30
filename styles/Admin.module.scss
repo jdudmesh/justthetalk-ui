@@ -1,0 +1,16 @@
+.postContainer {
+    position: relative;
+    width: clamp(45ch, 50%, 75ch);
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 20px;
+}
+
+.post {
+    margin-top: 10px;
+    padding: 10px;
+}
+
+.postSubItem {
+    margin-top: 10px;
+}

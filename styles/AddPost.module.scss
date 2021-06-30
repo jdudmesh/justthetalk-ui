@@ -1,0 +1,54 @@
+// This file is part of the JUSTtheTalkUI distribution (https://github.com/jdudmesh/justthetalk-ui).
+// Copyright (c) 2021 John Dudmesh.
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, version 3.
+// This program is distributed in the hope that it will be useful, but
+// WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+// General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
+.addPost {
+    margin-top: 10px;
+    padding: 10px;
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    box-shadow: none;
+}
+
+@media only screen and (max-width: 1200px) {
+    .postButton {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        .postButtonContainer {
+            display: flex;
+            flex-direction: row;
+        }
+    }
+}
+
+@media only screen and (min-width: 1200px) {
+    .postButton {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: space-between;
+    }
+}
+
+.userAlert {
+    margin-top: 10px;
+}
+
+.messageError {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    color: red;
+}

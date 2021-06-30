@@ -1,0 +1,216 @@
+// This file is part of the JUSTtheTalkUI distribution (https://github.com/jdudmesh/justthetalk-ui).
+// Copyright (c) 2021 John Dudmesh.
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, version 3.
+// This program is distributed in the hope that it will be useful, but
+// WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+// General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap');
+html,
+body {
+    padding: 0;
+    margin: 0;
+    font-family: Verdana, Helvetica Neue, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 20px;
+    background-color: #ffffff;
+    /* #f5f5f5 */
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.MuiToolbar-root {
+    a.MuiButton-outlinedPrimary {
+        color: white;
+        border: 1px solid white;
+    }
+}
+
+.container {
+    position: relative;
+    overflow: visible;
+    margin-bottom: 60px;
+}
+
+.discussionList {
+    position: relative;
+    overflow: visible !important;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.breadcrumb {
+    margin-bottom: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.breadcrumb-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    a {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+}
+
+@media only screen and (max-width: 799px) {
+    .leftButtonMenu {
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        display: flex;
+        flex-direction: row;
+        margin-bottom: 10px;
+        >.leftButtonMenuInner {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+    }
+}
+
+@media only screen and (min-width: 800px) {
+    .leftButtonMenu {
+        display: flex;
+        flex-direction: row-reverse;
+        padding-top: 58px;
+        >.leftButtonMenuInner {
+            display: flex;
+            flex-direction: column;
+        }
+    }
+}
+
+@media only screen and (min-width: 768px) {}
+
+@media only screen and (min-width: 1024px) {
+    .mainContent {
+        flex: 0;
+        width: 640px;
+    }
+}
+
+@media only screen and (min-width: 1200px) {
+    .mainContent {
+        flex: 0;
+        width: 640px;
+    }
+}
+
+a {
+    color: #2A5880;
+}
+
+.post-quoted {
+    margin-left: 36px;
+    margin-right: 36px;
+    font-family: Courier New, Courier, Monaco;
+    font-size: 0.9em;
+}
+
+.post-italic {
+    font-style: italic;
+}
+
+.post-bold {
+    font-weight: bold;
+}
+
+.post-centre {
+    text-align: center;
+}
+
+.post-underline {
+    text-decoration: underline;
+}
+
+.post-strikethrough {
+    text-decoration: line-through;
+}
+
+.post-noindentbullet {
+    padding-left: 1.5em;
+    margin-bottom: 0px;
+    margin-block-start: 0;
+}
+
+code {
+    white-space: normal;
+}
+
+.post-block {
+    color: inherit;
+}
+
+.post-spoiler {
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+    color: #2A5880;
+    cursor: pointer;
+    .post-spoiler-heading {
+        background-color: #f5f5f5;
+        padding: 10px;
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        text-align: center;
+    }
+    .post-spoiler-body {
+        color: rgba(0, 0, 0, 0.87);
+        padding: 10px;
+        filter: blur(0.33rem);
+        overflow: hidden;
+        transition: filter 0.4s ease-out;
+    }
+    &.show {
+        .post-spoiler-body {
+            filter: blur(0);
+        }
+    }
+}
+
+.loadingSpinner {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+}
+
+.Toastify__toast--info {
+    background-color: #2A5880;
+}
+
+.Toastify__toast--success {
+    background-color: lighten($color: #2A5880, $amount: 10%);
+}
+
+.Toastify__toast--warning {
+    background-color: #bd7100;
+}
+
+.Toastify__toast--error {
+    background-color: #92271f;
+}
+
+#search {
+    min-height: 43px;
+}

@@ -1,0 +1,92 @@
+// This file is part of the JUSTtheTalkUI distribution (https://github.com/jdudmesh/justthetalk-ui).
+// Copyright (c) 2021 John Dudmesh.
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, version 3.
+// This program is distributed in the hope that it will be useful, but
+// WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+// General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
+.container {
+    position: fixed;
+    width: 640px;
+    height: calc(100vh - 110px);
+    top: 100px;
+    display: flex;
+    flex-direction: row;
+}
+
+.expanded {
+    right: 0px;
+}
+
+.collapsed {
+    right: -500px;
+}
+
+.pullout {
+    width: 140px;
+}
+
+.pulloutInner {
+    // background-color: white;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    // border-left: 1px solid rgba(0, 0, 0, 0.12);
+    // border-top: 1px solid rgba(0, 0, 0, 0.12);
+    // border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    // border-top-left-radius: 5px;
+    // border-bottom-left-radius: 5px;
+}
+
+.body {
+    width: 590px;
+    height: 100%;
+}
+
+.moderationBlock {
+    padding: 10px;
+}
+
+.moderationPost {
+    padding: 10px;
+}
+
+.reportBlock {
+    margin-top: 5px;
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.reportHeading {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.reports,
+.adminComments {
+    margin-bottom: 10px;
+}
+
+.reportBody {
+    font-size: inherit;
+}
+
+.voteKeep {
+    color: #4caf50;
+}
+
+.voteDelete {
+    color: #f44336;
+}
+
+.adminButtons {
+    display: flex;
+    flex-direction: row-reverse;
+    button {
+        margin-left: 10px;
+    }
+}

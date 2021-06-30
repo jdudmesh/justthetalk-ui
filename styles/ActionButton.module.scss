@@ -1,0 +1,57 @@
+// This file is part of the JUSTtheTalkUI distribution (https://github.com/jdudmesh/justthetalk-ui).
+// Copyright (c) 2021 John Dudmesh.
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, version 3.
+// This program is distributed in the hope that it will be useful, but
+// WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+// General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
+$primaryColour: #2A5880;
+$primaryColourLight: lighten($primaryColour, 62.5%);
+.buttonContainer {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    color: $primaryColour;
+    border-radius: 24px;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    margin-bottom: 4px;
+    cursor: pointer;
+    &:hover {
+        background-color: $primaryColourLight;
+    }
+    overflow: visible;
+}
+
+.buttonContainerInner {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.fabContainer {
+    display: flex;
+}
+
+.fabContainerInner {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.labelContainer {
+    display: flex;
+    font-size: 1rem;
+    line-height: 40px;
+    margin-right: 10px;
+}
+
+.menuContainer {
+    position: absolute;
+    bottom: 0;
+}

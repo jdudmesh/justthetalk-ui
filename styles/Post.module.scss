@@ -1,0 +1,117 @@
+// This file is part of the JUSTtheTalkUI distribution (https://github.com/jdudmesh/justthetalk-ui).
+// Copyright (c) 2021 John Dudmesh.
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, version 3.
+// This program is distributed in the hope that it will be useful, but
+// WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+// General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
+.postContainer {
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 10px;
+}
+
+.buttonBar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    button {
+        margin-right: 5px;
+    }
+}
+
+.buttonBarLeft {
+    display: flex;
+    flex-direction: row;
+}
+
+.buttonBarRight {
+    display: flex;
+    flex-direction: row;
+}
+
+.postBody {
+    overflow-wrap: break-word;
+    p {
+        margin-block-start: 0;
+        margin-block-end: 0;
+    }
+    a {
+        overflow-wrap: anywhere;
+        word-break: break-all;
+    }
+}
+
+.postDate {
+    cursor: pointer;
+}
+
+.editedChip {
+    margin-left: 5px;
+}
+
+.postButton {
+    display: flex;
+    flex-direction: row-reverse;
+    margin-top: 5px;
+    button {
+        margin-left: 5px;
+    }
+}
+
+.messageError {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    color: red;
+}
+
+.deletedPost {
+    border-top: 1px solid #888888;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.adminChip {
+    margin-right: 5px;
+}
+
+.moderationBlock {
+    margin-top: 10px;
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.adminButtons {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row-reverse;
+    button {
+        margin-left: 5px;
+    }
+}
+
+.postReports {
+    margin-top: 10px;
+}
+
+.postCommentBox {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+}
+
+.postCommentText {
+    flex-grow: 1;
+}
+
+.postCommentButtons {
+    flex-grow: 0;
+    >button {
+        margin-left: 10px;
+        width: 80px;
+    }
+}

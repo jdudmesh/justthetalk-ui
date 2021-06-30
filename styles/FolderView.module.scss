@@ -1,0 +1,38 @@
+// This file is part of the JUSTtheTalkUI distribution (https://github.com/jdudmesh/justthetalk-ui).
+// Copyright (c) 2021 John Dudmesh.
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, version 3.
+// This program is distributed in the hope that it will be useful, but
+// WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+// General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
+.buttonBar {
+    display: flex;
+    flex-direction: row;
+}
+
+.paging {
+    margin-top: 10px;
+}
+
+.pagingContainer {
+    position: fixed;
+    width: 640px;
+    bottom: 0;
+    z-index: 10000;
+}
+
+.loadingSpinner {
+    width: 640px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+}
+
+.userAlert {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}

@@ -1,0 +1,70 @@
+// This file is part of the JUSTtheTalkUI distribution (https://github.com/jdudmesh/justthetalk-ui).
+// Copyright (c) 2021 John Dudmesh.
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, version 3.
+
+// This program is distributed in the hope that it will be useful, but
+// WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+// General Public License for more details.
+
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+
+import { LoadingState } from './constants';
+
+const discussionSlice = createSlice({
+    name: 'discussion',
+    initialState: {
+        loadingState: LoadingState.Pending,
+        actionState: LoadingState.Pending,
+        items: [],
+        actionError: "",
+        createdDiscussion: null,
+        pageSize: 50,
+    },
+    reducers: {
+        appendDiscussions: (state, action) => {
+            state.items = [...state.items, ...action.payload];
+        },
+        clearDiscussions: (state) => {
+            state.items = [];
+            state.state = LoadingState.Loaded;
+        },
+        clearCreatedDiscussion: (state) => {
+            state.discussionCreationState = 0;
+            state.discussionCreationError = "";
+            state.createdDiscussion = null;
+        },
+        setDiscussionLoadingState: (state, action) => {
+            state.loadingState = action.payload;
+        },
+        setDiscussionActionState: (state, action) => {
+            state.actionState = action.payload;
+        },
+        setDiscussionActionError: (state, action) => {
+            state.actionError = action.payload;
+        },
+        clearDiscussionActionState: (state) => {
+            state.actionState = LoadingState.Pending;
+            state.actionError = "";
+        },
+    },
+});
+
+export const { appendDiscussions, clearDiscussions, clearCreatedDiscussion, setDiscussionLoadingState, setDiscussionActionState, setDiscussionActionError, clearDiscussionActionState } = discussionSlice.actions
+
+export const selectDiscussionLoadingState = state => state.discussion.loadingState;
+export const selectDiscussionActionState = state => state.discussion.actionState;
+export const selectDiscussions = state => state.discussion.items;
+export const selectDiscussionPageStart = state => state.discussion.pageStart;
+export const selectDiscussionPageSize = state => state.discussion.pageSize;
+
+export const selectCreatedDiscussion = state => state.discussion.createdDiscussion;
+export const selectDiscussionActionError = state => state.discussion.actionError;
+
+export default discussionSlice.reducer

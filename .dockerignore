@@ -1,0 +1,4 @@
+.DS_Store
+.env.development
+cypress
+node_modules

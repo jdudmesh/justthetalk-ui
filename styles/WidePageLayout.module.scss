@@ -1,0 +1,70 @@
+// This file is part of the JUSTtheTalkUI distribution (https://github.com/jdudmesh/justthetalk-ui).
+// Copyright (c) 2021 John Dudmesh.
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, version 3.
+// This program is distributed in the hope that it will be useful, but
+// WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+// General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
+.drawer {
+    position: absolute;
+    top: 75px;
+    left: 0;
+}
+
+.drawerContainer {
+    width: 240px;
+    height: calc(100vh - 75px);
+    overflow: hidden;
+    transition: width 0.4s;
+    &.closed {
+        width: 50px;
+    }
+}
+
+.drawerHeader {
+    width: 100%;
+    height: 75px;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    &.open {
+        justify-content: right;
+    }
+    &.closed {
+        justify-content: center;
+    }
+}
+
+.drawerButton {
+    width: 40px;
+    height: 40px;
+}
+
+.drawerContent {
+    width: 240px;
+}
+
+.mainContainer {
+    margin-top: 75px;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    transition: margin-left 0.4s;
+    &.open {
+        margin-left: 250px;
+    }
+    &.closed {
+        margin-left: 60px;
+    }
+}
+
+.centreColumn {
+    width: clamp(480px, 640px, 800px);
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+}

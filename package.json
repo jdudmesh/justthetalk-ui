@@ -1,0 +1,36 @@
+{
+  "name": "justthetalk_ui",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/data-grid": "^4.0.0-alpha.27",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "^4.0.0-alpha.57",
+    "@material-ui/styles": "^4.11.3",
+    "@reduxjs/toolkit": "^1.5.0",
+    "axios": "^0.21.1",
+    "date-fns": "^2.18.0",
+    "jwt-decode": "^3.1.2",
+    "mysql": "^2.18.1",
+    "next": "10.0.7",
+    "react": "17.0.1",
+    "react-device-detect": "^1.17.0",
+    "react-dom": "17.0.1",
+    "react-google-recaptcha": "^2.1.0",
+    "react-redux": "^7.2.2",
+    "react-responsive": "^8.2.0",
+    "react-slugify": "^2.0.3",
+    "react-spinners": "^0.10.6",
+    "react-toastify": "^7.0.3",
+    "sass": "^1.32.8"
+  },
+  "devDependencies": {
+    "cypress": "7.3.0"
+  }
+}
