@@ -32,6 +32,7 @@ import {
     fetchBlockedUsersAPI,
     searchUsersAPI,
     filterUsersAPI,
+    toggleUserStatusAPI,
 } from "../api";
 
 import {
@@ -41,6 +42,7 @@ import {
     setAdminActionState,
     setBlockedUsers,
     setUserSearchResults,
+    mergeUserSearchResults,
 } from "./adminSlice";
 
 import {setCurrentDiscussion} from "./userSlice";
@@ -205,6 +207,17 @@ export const filterUsers = (filterKey) => (dispatch) => {
     dispatch(setAdminActionState(LoadingState.Loading));
     filterUsersAPI(filterKey).then((res) => {
         dispatch(setUserSearchResults(res.data.data));
+        dispatch(setAdminActionState(LoadingState.Loaded));
+    }).catch((err) => {
+        console.error(err);
+        dispatch(setAdminActionState(LoadingState.Failed));
+    });
+}
+
+export const toggleUserStatus = (field, user) => (dispatch) => {
+    dispatch(setAdminActionState(LoadingState.Loading));
+    toggleUserStatusAPI(field, user).then((res) => {
+        dispatch(mergeUserSearchResults(res.data.data));
         dispatch(setAdminActionState(LoadingState.Loaded));
     }).catch((err) => {
         console.error(err);

@@ -1,18 +1,3 @@
-// This file is part of the JUSTtheTalkUI distribution (https://github.com/jdudmesh/justthetalk-ui).
-// Copyright (c) 2021 John Dudmesh.
-
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, version 3.
-
-// This program is distributed in the hope that it will be useful, but
-// WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-// General Public License for more details.
-
-// You should have received a copy of the GNU General Public License
-// along with this program. If not, see <http://www.gnu.org/licenses/>.
-
 import React, {useState, useEffect} from 'react';
 
 import { useSelector, useDispatch } from 'react-redux'
@@ -22,12 +7,22 @@ import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import { Typography } from '@material-ui/core';
+
+import { Post } from './Post.jsx';
 
 import { selectUser } from '../redux/userSlice';
 import { createAdminComment } from '../redux/adminActions';
 
-export function AdminPostComment({result, open, onClose}) {
+import styles from '../styles/AdminPostComment.module.scss';
+
+
+export function AdminPostComment({post, open, onClose}) {
 
     const dispatch = useDispatch();
 
@@ -67,18 +62,18 @@ export function AdminPostComment({result, open, onClose}) {
         }
 
         if(!isErr) {
-            dispatch(createAdminComment({discussionId: result.post.discussionId, postId: result.post.id, vote: result.vote, body: comment}));
+            dispatch(createAdminComment({discussionId: post.post.discussionId, postId: post.post.id, vote: post.vote, body: comment}));
             handleClose();
         }
 
     }
 
-    if(!result) {
+    if(!post) {
         return <></>
     }
 
     return <Dialog open={openState} onClose={handleClose} aria-labelledby="form-dialog-title" maxWidth="sm" fullWidth>
-        <DialogTitle id="form-dialog-title">Admin Comment ({result.vote == 1 ? "Keep" : "Delete"})</DialogTitle>
+        <DialogTitle id="form-dialog-title">Admin Comment ({post.vote == 1 ? "Keep" : "Delete"})</DialogTitle>
             <DialogContent>
 
                 <TextField

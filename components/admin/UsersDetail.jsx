@@ -25,7 +25,7 @@ import { DataGrid, GridToolbarContainer } from "@material-ui/data-grid";
 import { format, formatDistanceToNow, parseISO, add, isFuture, isAfter } from 'date-fns'
 
 import { selectUserSearchResults  } from "../../redux/adminSlice";
-import { searchUsers, filterUsers } from "../../redux/adminActions";
+import { searchUsers, filterUsers, toggleUserStatus } from "../../redux/adminActions";
 
 import { htmlDecode } from "../../lib/utils";
 
@@ -97,7 +97,7 @@ export function UsersDetail({}) {
             width: 50,
             headerAlign: 'center',
             align: 'center',
-            renderCell: (params) => <IconButton className={muiStyles.buttonRoot} size="small">{params.row.enabled ? <CheckIcon /> : <ClearIcon />}</IconButton>,
+            renderCell: (params) => <IconButton className={muiStyles.buttonRoot} size="small" onClick={() => onActionUser(params.field, params.row)}>{params.row.enabled ? <CheckIcon /> : <ClearIcon />}</IconButton>,
             renderHeader: (params) => <Tooltip title="Deleted"><DeleteIcon /></Tooltip>
 
         },
@@ -111,7 +111,7 @@ export function UsersDetail({}) {
             width: 50,
             headerAlign: 'center',
             align: 'center',
-            renderCell: (params) => <IconButton className={muiStyles.buttonRoot} size="small">{params.row.accountLocked ? <CheckIcon /> : <ClearIcon />}</IconButton>,
+            renderCell: (params) => <IconButton className={muiStyles.buttonRoot} size="small" onClick={() => onActionUser(params.field, params.row)}>{params.row.accountLocked ? <CheckIcon /> : <ClearIcon />}</IconButton>,
             renderHeader: (params) => <Tooltip title="Locked"><LockIcon /></Tooltip>
         },
         {
@@ -124,7 +124,7 @@ export function UsersDetail({}) {
             width: 50,
             headerAlign: 'center',
             align: 'center',
-            renderCell: (params) => <IconButton className={muiStyles.buttonRoot} size="small">{params.row.isPremoderate ? <CheckIcon /> : <ClearIcon />}</IconButton>,
+            renderCell: (params) => <IconButton className={muiStyles.buttonRoot} size="small" onClick={() => onActionUser(params.field, params.row)}>{params.row.isPremoderate ? <CheckIcon /> : <ClearIcon />}</IconButton>,
             renderHeader: (params) => <Tooltip title="Pre-moderated"><PauseIcon /></Tooltip>
         },
         {
@@ -137,7 +137,7 @@ export function UsersDetail({}) {
             width: 50,
             headerAlign: 'center',
             align: 'center',
-            renderCell: (params) => <IconButton className={muiStyles.buttonRoot} size="small">{params.row.isWatch ? <CheckIcon /> : <ClearIcon />}</IconButton>,
+            renderCell: (params) => <IconButton className={muiStyles.buttonRoot} size="small" onClick={() => onActionUser(params.field, params.row)}>{params.row.isWatch ? <CheckIcon /> : <ClearIcon />}</IconButton>,
             renderHeader: (params) => <Tooltip title="Watch"><PolicyIcon /></Tooltip>
         },
         {
@@ -150,14 +150,15 @@ export function UsersDetail({}) {
             width: 50,
             headerAlign: 'center',
             align: 'center',
-            renderCell: (params) => <IconButton className={muiStyles.buttonRoot} size="small">{params.row.isAdmin ? <CheckIcon /> : <ClearIcon />}</IconButton>,
+            renderCell: (params) => <IconButton className={muiStyles.buttonRoot} size="small" onClick={() => onActionUser(params.field, params.row)}>{params.row.isAdmin ? <CheckIcon /> : <ClearIcon />}</IconButton>,
             renderHeader: (params) => <Tooltip title="Admin"><SupervisorAccountIcon /></Tooltip>
         },
 
       ];
 
-    const onSelect = (ev) => {
-        setSelectedItems(ev.selectionModel);
+    const onActionUser = (field, user) => {
+        console.log(field, user);
+        dispatch(toggleUserStatus(field, user));
     }
 
     const onKeyDown = (ev) => {

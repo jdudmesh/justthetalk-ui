@@ -70,7 +70,18 @@ const adminSlice = createSlice({
         },
         setUserSearchResults: (state, action) => {
             state.userSearchResults = action.payload;
-        }
+        },
+        mergeUserSearchResults: (state, action) => {
+            let user = action.payload;
+            let nextResults = state.userSearchResults.map( u => {
+                if(u.id === user.id) {
+                    return user;
+                } else {
+                    return u;
+                }
+            });
+            state.userSearchResults = [...nextResults];
+        },
     },
 })
 
@@ -86,6 +97,7 @@ export const {
     setAdminActionError,
     setBlockedUsers,
     setUserSearchResults,
+    mergeUserSearchResults,
 } = adminSlice.actions
 
 export const selectModerationQueue = state => state.admin.moderationQueue;

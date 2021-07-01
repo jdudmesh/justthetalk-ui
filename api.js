@@ -158,6 +158,8 @@ export const deleteDiscussionAPI = (discussion) => Api.Delete(`/folder/${discuss
 
 export const fetchFrontPageAPI = (viewType, start, size) => Api.Get(`/frontpage/${viewType}?start=${start}&size=${size}`);
 
+
+export const toggleUserStatusAPI = (field, user) => Api.Put(`/admin/user/${user.id}/status`, { [field] : !user[field] });
 export const searchUsersAPI = (searchTerm) => Api.Get(`/admin/user/search?term=${encodeURIComponent(searchTerm)}`);
 export const filterUsersAPI = (filterKey) => Api.Get(`/admin/user/search?filter=${encodeURIComponent(filterKey)}`);
 export const fetchModerationQueueAPI = () => Api.Get("/admin/moderation/queue");
