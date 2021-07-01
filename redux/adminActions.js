@@ -30,9 +30,19 @@ import {
     blockUserFromDiscussionAPI,
     unblockUserFromDiscussionAPI,
     fetchBlockedUsersAPI,
+    searchUsersAPI,
+    filterUsersAPI,
 } from "../api";
 
-import { setModerationQueue, appendModerationHistory, setModerationHistoryFetchState, setAdminActionState, setBlockedUsers } from "./adminSlice";
+import {
+    setModerationQueue,
+    appendModerationHistory,
+    setModerationHistoryFetchState,
+    setAdminActionState,
+    setBlockedUsers,
+    setUserSearchResults,
+} from "./adminSlice";
+
 import {setCurrentDiscussion} from "./userSlice";
 import {mergePosts} from "./postSlice";
 
@@ -173,6 +183,28 @@ export const fetchModerationQueue = () => (dispatch) => {
     dispatch(setAdminActionState(LoadingState.Loading));
     fetchModerationQueueAPI().then((res) => {
         dispatch(setModerationQueue(res.data.data));
+        dispatch(setAdminActionState(LoadingState.Loaded));
+    }).catch((err) => {
+        console.error(err);
+        dispatch(setAdminActionState(LoadingState.Failed));
+    });
+}
+
+export const searchUsers = (searchTerm) => (dispatch) => {
+    dispatch(setAdminActionState(LoadingState.Loading));
+    searchUsersAPI(searchTerm).then((res) => {
+        dispatch(setUserSearchResults(res.data.data));
+        dispatch(setAdminActionState(LoadingState.Loaded));
+    }).catch((err) => {
+        console.error(err);
+        dispatch(setAdminActionState(LoadingState.Failed));
+    });
+}
+
+export const filterUsers = (filterKey) => (dispatch) => {
+    dispatch(setAdminActionState(LoadingState.Loading));
+    filterUsersAPI(filterKey).then((res) => {
+        dispatch(setUserSearchResults(res.data.data));
         dispatch(setAdminActionState(LoadingState.Loaded));
     }).catch((err) => {
         console.error(err);

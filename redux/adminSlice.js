@@ -31,6 +31,7 @@ const adminSlice = createSlice({
         fetchCommentsState: LoadingState.Pending,
         actionState: LoadingState.Pending,
         actionError: "",
+        userSearchResults: [],
     },
     reducers: {
         setModerationQueue: (state, action) => {
@@ -66,11 +67,26 @@ const adminSlice = createSlice({
         },
         setBlockedUsers: (state, action) => {
             state.blockedUsers = action.payload;
+        },
+        setUserSearchResults: (state, action) => {
+            state.userSearchResults = action.payload;
         }
     },
 })
 
-export const { setModerationQueue, appendModerationHistory, setModerationHistoryFetchState, setReportsFetchState, setCommentsFetchState, setPostReports, setAdminComments, setAdminActionState, setAdminActionError, setBlockedUsers } = adminSlice.actions
+export const {
+    setModerationQueue,
+    appendModerationHistory,
+    setModerationHistoryFetchState,
+    setReportsFetchState,
+    setCommentsFetchState,
+    setPostReports,
+    setAdminComments,
+    setAdminActionState,
+    setAdminActionError,
+    setBlockedUsers,
+    setUserSearchResults,
+} = adminSlice.actions
 
 export const selectModerationQueue = state => state.admin.moderationQueue;
 export const selectModerationHistory = state => state.admin.moderationHistory;
@@ -83,5 +99,6 @@ export const selectFetchCommentsState = state => state.admin.fetchCommentsState;
 export const selectAdminActionState = state => state.admin.actionState;
 export const selectAdminActionError = state => state.admin.actionError;
 export const selectBlockedUsers = state => state.admin.blockedUsers;
+export const selectUserSearchResults = state => state.admin.userSearchResults;
 
 export default adminSlice.reducer

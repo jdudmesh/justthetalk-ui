@@ -37,12 +37,8 @@ import WidePageLayout from "../layouts/widepage";
 
 import { ReportsHistory } from "../components/admin/ReportsHistory";
 import { ModerationQueue } from "../components/admin/ModerationQueue";
-import { UsersBlocked } from "../components/admin/UsersBlocked";
 import { UsersDetail } from "../components/admin/UsersDetail";
-import { UsersLocked } from "../components/admin/UsersLocked";
-import { UsersPremod } from "../components/admin/UsersPremod";
-import { UsersRecent } from "../components/admin/UsersRecent";
-import { UsersWatch } from "../components/admin/UsersWatch";
+import { UsersBlocked } from "../components/admin/UsersBlocked";
 
 import styles from "../styles/Admin.module.scss";
 import { LoadingState } from "../redux/constants";
@@ -88,25 +84,9 @@ export default function Admin(props) {
                 <ListItemIcon className={classes.root}><PersonIcon /></ListItemIcon>
                 <ListItemText primary="Users" />
             </ListItem>
-            <ListItem button onClick={() => setViewType("users-premod")} data-test-id="admin-users-premod">
-                <ListItemIcon className={classes.root}><PersonIcon /></ListItemIcon>
-                <ListItemText primary="Users - Pre-Mod" />
-            </ListItem>
-            <ListItem button onClick={() => setViewType("users-watch")} data-test-id="admin-users-watch">
-                <ListItemIcon className={classes.root}><PersonIcon /></ListItemIcon>
-                <ListItemText primary="Users - On Watch" />
-            </ListItem>
-            <ListItem button onClick={() => setViewType("users-locked")} data-test-id="admin-users-locked">
-                <ListItemIcon className={classes.root}><PersonIcon /></ListItemIcon>
-                <ListItemText primary="Users - Locked" />
-            </ListItem>
             <ListItem button onClick={() => setViewType("users-blocked")} data-test-id="admin-users-blocked">
                 <ListItemIcon className={classes.root}><PersonIcon /></ListItemIcon>
                 <ListItemText primary="Users - Thread blocks" />
-            </ListItem>
-            <ListItem button onClick={() => setViewType("users-recent")} data-test-id="admin-users-recent">
-                <ListItemIcon className={classes.root}><PersonIcon /></ListItemIcon>
-                <ListItemText primary="Users - Recent Signups" />
             </ListItem>
         </List>
     }
@@ -119,16 +99,8 @@ export default function Admin(props) {
                 return <ReportsHistory />;
             case "users-detail":
                 return <UsersDetail />
-            case "users-premod":
-                return <UsersPremod />
-            case "users-watch":
-                return <UsersWatch />
-            case "users-locked":
-                return <UsersLocked />
             case "users-blocked":
                 return <UsersBlocked />
-            case "users-recent":
-                return <UsersRecent />
             }
     }
 
