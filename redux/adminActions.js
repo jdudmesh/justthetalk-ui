@@ -18,6 +18,7 @@ import { toast } from "react-toastify";
 import { LoadingState } from "./constants";
 
 import {
+    fetchModerationHistoryAPI,
     fetchModerationQueueAPI,
     lockDiscussionAPI,
     premoderateDiscussionAPI,
@@ -31,7 +32,7 @@ import {
     fetchBlockedUsersAPI,
 } from "../api";
 
-import { setModerationQueue, setReportsFetchState, setPostReports, setCommentsFetchState, setAdminComments, setAdminActionState, setBlockedUsers } from "./adminSlice";
+import { setModerationQueue, appendModerationHistory, setModerationHistoryFetchState, setAdminActionState, setBlockedUsers } from "./adminSlice";
 import {setCurrentDiscussion} from "./userSlice";
 import {mergePosts} from "./postSlice";
 
@@ -157,7 +158,19 @@ export const adminDeletePost = (post, mutateState) => (dispatch) => {
 
 }
 
+export const fetchModerationHistory = (start) => (dispatch) => {
+    dispatch(setModerationHistoryFetchState(LoadingState.Loading));
+    fetchModerationHistoryAPI(start, 20).then((res) => {
+        dispatch(appendModerationHistory(res.data.data));
+        dispatch(setModerationHistoryFetchState(LoadingState.Loaded));
+    }).catch((err) => {
+        console.error(err);
+        dispatch(setModerationHistoryFetchState(LoadingState.Failed));
+    });
+}
+
 export const fetchModerationQueue = () => (dispatch) => {
+    dispatch(setAdminActionState(LoadingState.Loading));
     fetchModerationQueueAPI().then((res) => {
         dispatch(setModerationQueue(res.data.data));
         dispatch(setAdminActionState(LoadingState.Loaded));

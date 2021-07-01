@@ -24,7 +24,6 @@ import { Paper, Button } from "@material-ui/core";
 import { Post } from "../Post";
 
 import styles from "../../styles/Admin.module.scss";
-import { ContactsOutlined } from "@material-ui/icons";
 
 export function ModerationQueue({}) {
 

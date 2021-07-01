@@ -21,9 +21,12 @@ const adminSlice = createSlice({
     name: 'admin',
     initialState: {
         moderationQueue: [],
+        moderationHistory: [],
+        moderationHistoryFetchComplete: false,
         postReports: [],
         adminComments: [],
         blockedUsers: {},
+        fetchModerationHistoryState: LoadingState.Pending,
         fetchReportsState: LoadingState.Pending,
         fetchCommentsState: LoadingState.Pending,
         actionState: LoadingState.Pending,
@@ -32,6 +35,16 @@ const adminSlice = createSlice({
     reducers: {
         setModerationQueue: (state, action) => {
             state.moderationQueue = action.payload;
+        },
+        appendModerationHistory: (state, action) => {
+            if(action.payload.length > 0) {
+                state.moderationHistory = [...state.moderationHistory, ...action.payload];
+            } else {
+                state.moderationHistoryFetchComplete = true;
+            }
+        },
+        setModerationHistoryFetchState: (state, action) => {
+            state.fetchModerationHistoryState = action.payload
         },
         setReportsFetchState: (state, action) => {
             state.fetchReportsState = action.payload;
@@ -57,11 +70,14 @@ const adminSlice = createSlice({
     },
 })
 
-export const { setModerationQueue, setReportsFetchState, setCommentsFetchState, setPostReports, setAdminComments, setAdminActionState, setAdminActionError, setBlockedUsers } = adminSlice.actions
+export const { setModerationQueue, appendModerationHistory, setModerationHistoryFetchState, setReportsFetchState, setCommentsFetchState, setPostReports, setAdminComments, setAdminActionState, setAdminActionError, setBlockedUsers } = adminSlice.actions
 
 export const selectModerationQueue = state => state.admin.moderationQueue;
+export const selectModerationHistory = state => state.admin.moderationHistory;
 export const selectAdminPostReports = state => state.admin.postReports;
 export const selectAdminComments = state => state.admin.adminComments;
+export const selectFetchModerationHistoryState = state => state.admin.fetchModerationHistoryState;
+export const selectModerationHistoryFetchComplete = state => state.admin.moderationHistoryFetchComplete;
 export const selectFetchReportsState = state => state.admin.fetchReportsState;
 export const selectFetchCommentsState = state => state.admin.fetchCommentsState;
 export const selectAdminActionState = state => state.admin.actionState;
