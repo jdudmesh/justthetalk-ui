@@ -395,7 +395,11 @@ export default function DiscussionView(props) {
     }
 
     const onIsEditingPostChanged = (state) => {
-        setIsEditingPost(state);
+        if(state) {
+            setIsEditingPost(state);
+        } else {
+            setTimeout(() => setIsEditingPost(false), 500);
+        }
     }
 
     const discussionTitle = () => {
