@@ -32,6 +32,7 @@ const adminSlice = createSlice({
         actionState: LoadingState.Pending,
         actionError: "",
         userSearchResults: [],
+        allBlockedUsers: [],
     },
     reducers: {
         setModerationQueue: (state, action) => {
@@ -82,6 +83,9 @@ const adminSlice = createSlice({
             });
             state.userSearchResults = [...nextResults];
         },
+        setAllBlockedUsers: (state, action) => {
+            state.allBlockedUsers = [...action.payload]
+        },
     },
 })
 
@@ -98,6 +102,7 @@ export const {
     setBlockedUsers,
     setUserSearchResults,
     mergeUserSearchResults,
+    setAllBlockedUsers,
 } = adminSlice.actions
 
 export const selectModerationQueue = state => state.admin.moderationQueue;
@@ -112,5 +117,6 @@ export const selectAdminActionState = state => state.admin.actionState;
 export const selectAdminActionError = state => state.admin.actionError;
 export const selectBlockedUsers = state => state.admin.blockedUsers;
 export const selectUserSearchResults = state => state.admin.userSearchResults;
+export const selectAllBlockedUsers = state => state.admin.allBlockedUsers;
 
 export default adminSlice.reducer

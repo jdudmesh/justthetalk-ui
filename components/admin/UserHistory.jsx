@@ -36,7 +36,6 @@ export function UserHistory({userId, username, open, onClose}) {
             return;
         }
         fetchUserHistoryAPI(userId).then((res) => {
-            console.log(res.data.data);
             setHistory(res.data.data);
         });
     }, [userId, open]);

@@ -39,3 +39,8 @@
         text-decoration: underline;
     }
 }
+
+.tableToolbar {
+    display: flex;
+    flex-direction: row-reverse;
+}

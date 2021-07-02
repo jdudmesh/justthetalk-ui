@@ -178,6 +178,7 @@ export const eraseDiscussionAPI = (discussion) => Api.Delete(`/admin/discussion/
 export const blockUserFromDiscussionAPI = (discussion, userId) => Api.Post(`/admin/discussion/${discussion.id}/user/block/${userId}`);
 export const unblockUserFromDiscussionAPI = (discussion, userId) => Api.Delete(`/admin/discussion/${discussion.id}/user/block/${userId}`);
 export const fetchBlockedUsersAPI = (discussion) => Api.Get(`/admin/discussion/${discussion.id}/user/block`);
+export const fetchAllBlockedUsersAPI = (discussion) => Api.Get(`/admin/users/discussion/block`);
 
 export const adminDeletePostAPI = (post) => Api.Post(`/admin/discussion/${post.discussionId}/post/${post.id}/delete`);
 export const adminUndeletePostAPI = (post) => Api.Delete(`/admin/discussion/${post.discussionId}/post/${post.id}/delete`);

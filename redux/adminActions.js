@@ -33,6 +33,7 @@ import {
     searchUsersAPI,
     filterUsersAPI,
     toggleUserStatusAPI,
+    fetchAllBlockedUsersAPI,
 } from "../api";
 
 import {
@@ -43,6 +44,7 @@ import {
     setBlockedUsers,
     setUserSearchResults,
     mergeUserSearchResults,
+    setAllBlockedUsers,
 } from "./adminSlice";
 
 import {setCurrentDiscussion} from "./userSlice";
@@ -224,3 +226,15 @@ export const toggleUserStatus = (field, user) => (dispatch) => {
         dispatch(setAdminActionState(LoadingState.Failed));
     });
 }
+
+export const fetchAllBlockedUsers = (searchTerm) => (dispatch) => {
+    dispatch(setAdminActionState(LoadingState.Loading));
+    fetchAllBlockedUsersAPI().then((res) => {
+        dispatch(setAllBlockedUsers(res.data.data));
+        dispatch(setAdminActionState(LoadingState.Loaded));
+    }).catch((err) => {
+        console.error(err);
+        dispatch(setAdminActionState(LoadingState.Failed));
+    });
+}
+
