@@ -69,7 +69,7 @@ const adminSlice = createSlice({
             state.blockedUsers = action.payload;
         },
         setUserSearchResults: (state, action) => {
-            state.userSearchResults = action.payload;
+            state.userSearchResults = [...action.payload];
         },
         mergeUserSearchResults: (state, action) => {
             let user = action.payload;

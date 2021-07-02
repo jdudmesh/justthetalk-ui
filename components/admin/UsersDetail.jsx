@@ -27,7 +27,7 @@ import { format, formatDistanceToNow, parseISO, add, isFuture, isAfter } from 'd
 import { selectUserSearchResults  } from "../../redux/adminSlice";
 import { searchUsers, filterUsers, toggleUserStatus } from "../../redux/adminActions";
 
-import { htmlDecode } from "../../lib/utils";
+import { UserHistory } from "./UserHistory";
 
 import styles from "../../styles/UsersDetail.module.scss";
 
@@ -64,10 +64,17 @@ export function UsersDetail({}) {
     const [searchTerm, setSearchTerm] = useState("");
     const [filterLabel, setFilterLabel] = useState("Filter: Search");
     const [anchorEl, setAnchorEl] = useState(null);
+    const [showHistoryUserId, setShowHistoryUserId] = useState(0);
+    const [showHistoryUserName, setShowHistoryUserName] = useState("");
 
     const columns = [
         { field: 'id', hide: true },
-        { field: 'username', headerName: 'Name', flex: 1 },
+        {
+            field: 'username',
+            headerName: 'Name',
+            flex: 1,
+            renderCell: (params) => <a onClick={() => showUserHistory(params.row)}>{params.row.username}</a>,
+        },
         { field: 'email', headerName: 'EMail', flex: 1 },
         {
             field: 'createdDate',
@@ -97,7 +104,7 @@ export function UsersDetail({}) {
             width: 50,
             headerAlign: 'center',
             align: 'center',
-            renderCell: (params) => <IconButton className={muiStyles.buttonRoot} size="small" onClick={() => onActionUser(params.field, params.row)}>{params.row.enabled ? <CheckIcon /> : <ClearIcon />}</IconButton>,
+            renderCell: (params) => <IconButton className={muiStyles.buttonRoot} size="small" onClick={() => onActionUser(params.field, params.row)}>{params.row.enabled ? <ClearIcon /> : <CheckIcon />}</IconButton>,
             renderHeader: (params) => <Tooltip title="Deleted"><DeleteIcon /></Tooltip>
 
         },
@@ -204,6 +211,16 @@ export function UsersDetail({}) {
         onCloseMenu();
     }
 
+    const showUserHistory = (detail) => {
+        setShowHistoryUserId(detail.id);
+        setShowHistoryUserName(detail.username);
+    }
+
+    const onCloseHistory = () => {
+        setShowHistoryUserId(0);
+        setShowHistoryUserName("");
+    }
+
     return <Paper elevation={0} className={styles.container}>
         <Typography variant="h6" color="textSecondary" size="small" gutterBottom>Users</Typography>
 
@@ -239,6 +256,9 @@ export function UsersDetail({}) {
             isRowSelectable={false}
             density="compact"
              />
+
+        <UserHistory open={showHistoryUserId > 0} userId={showHistoryUserId} username={showHistoryUserName} onClose={onCloseHistory} />
+
     </Paper>
 
 }
