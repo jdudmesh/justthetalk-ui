@@ -32,3 +32,10 @@
     margin-top: 10px;
     margin-bottom: 10px;
 }
+
+.usernameLink {
+    cursor: pointer;
+    &:hover {
+        text-decoration: underline;
+    }
+}

@@ -73,7 +73,7 @@ export function UsersDetail({}) {
             field: 'username',
             headerName: 'Name',
             flex: 1,
-            renderCell: (params) => <a onClick={() => showUserHistory(params.row)}>{params.row.username}</a>,
+            renderCell: (params) => <a className={styles.usernameLink} onClick={() => showUserHistory(params.row)}>{params.row.username}</a>,
         },
         { field: 'email', headerName: 'EMail', flex: 1 },
         {
