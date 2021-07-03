@@ -10,3 +10,25 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 .donateButton {}
+
+.guardianQuote {
+    margin-left: 100px;
+    margin-right: 100px;
+    font-style: italic;
+}
+
+.oldSiteImages {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    >img {
+        max-width: 100%;
+        border: 1px solid black;
+        margin-bottom: 20px;
+        display: block;
+    }
+}
+
+.importantText {
+    font-weight: bold;
+}

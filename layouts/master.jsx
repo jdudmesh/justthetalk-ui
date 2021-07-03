@@ -100,7 +100,6 @@ export default function MasterLayout({title, leftContent, children}) {
                         <li><Link href="/support"><a>Support JUSTtheTalk</a></Link></li>
                         <li><Link href="/help"><a>Help</a></Link></li>
                         <li><Link href="/terms"><a>Terms &amp; Conditions</a></Link></li>
-                        <li><Link href="/privacy"><a>Privacy Policy</a></Link></li>
                     </ul>
             </div>
 
