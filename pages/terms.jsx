@@ -235,6 +235,7 @@ export default function Terms() {
 
 <Typography variant="h6" color="textSecondary" gutterBottom>Limitation of Liability</Typography>
 <p>In no event will JUSTtheTalk be liable for any loss or damage whatsoever (including without limitation damages relating to reputation, lost revenues or profits, lost data, work stoppage, computer failure or malfunction) resulting from or in any way related to the use of any materials posted on or made available in the forums or any other web site to which a link is provided, even if JUSTtheTalk has been advised of the possibility of such damages and regardless of the legal theory or jurisdiction on which such damages are based.</p>
+<p>JUSTtheTalk is not the source of the information on this site, and therefore cannot guarantee the accuracy of any information provided by any user, which may be incorrect, incomplete or condensed.</p>
 
 <p>These Terms and Conditions may be amended by us at our discretion from time to time, and any such amendments shall take effect as soon as they are posted on JUSTtheTalk. We therefore suggest that you review it periodically. Notification of changes will also be posted as an announcement by the admins.</p>
 
