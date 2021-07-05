@@ -39,6 +39,7 @@ export const fetchFrontPage = (viewType, start) => (dispatch, getState) => {
     let size = state.frontPage.pageSize;
 
     fetchFrontPageAPI(viewType, start, size).then((res) => {
+        localStorage.setItem("reloadCount", "0");
         let items = res.data.data;
         if(items) {
             if(items.length < size) {
@@ -51,8 +52,14 @@ export const fetchFrontPage = (viewType, start) => (dispatch, getState) => {
         dispatch(setFrontPageLoadingState(LoadingState.Loaded));
     }).catch((err) => {
         console.error(err);
-        toast.error("Failed to fetch front page");
-        dispatch(setFrontPageLoadingState(LoadingState.Failed));
+        let reloadCount = parseInt(localStorage.getItem("reloadCount") || 0);
+        if(reloadCount === 0) {
+            localStorage.setItem("reloadCount", (reloadCount + 1).toString());
+            window.location.reload()
+        } else {
+            toast.error("Failed to fetch front page");
+            dispatch(setFrontPageLoadingState(LoadingState.Failed));
+        }
     });
 
 }
