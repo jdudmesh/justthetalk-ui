@@ -244,3 +244,9 @@ export default function Terms() {
     </MasterLayout>
 
 }
+
+export async function getStaticProps(context) {
+    return {
+        props: {},
+    }
+}
