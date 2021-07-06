@@ -28,6 +28,7 @@ import { format, formatDistanceToNow, parseISO, add, isFuture, isAfter } from 'd
 
 import ReportIcon from '@material-ui/icons/Report';
 import EditIcon from '@material-ui/icons/Edit';
+import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import VisibilityIcon from '@material-ui/icons/Visibility';
@@ -282,7 +283,7 @@ export function Post({post, discussion, blockedUsers, onReport, readOnly}) {
                     }
 
 
-                    { currentUser.id == post.createdByUserId && post.status == STATUS_OK
+                    { currentUser.id == post.createdByUserId && (post.status == STATUS_OK || post.status == STATUS_WATCH)
                         ? <>
                             { isInEditWindow ? <Tooltip title="Edit post" aria-label="Edit post"><IconButton size={buttonSize} color="primary" onClick={onEditPost} data-test-id="edit-post"><EditIcon/></IconButton></Tooltip> : <></> }
                             <Tooltip title="Delete post" aria-label="Delete post"><IconButton size={buttonSize} color="primary" onClick={onDeletePost} data-test-id="delete-post"><DeleteIcon/></IconButton></Tooltip>
@@ -372,12 +373,14 @@ export function Post({post, discussion, blockedUsers, onReport, readOnly}) {
         return <div id={`post_${post.id}`} className={[styles.postContainer, "post"].join(" ")} onMouseOver={onMouseOver} onMouseOut={onMouseOut} style={{backgroundColor: isHighlight ? "#f5f5f5" : "inherit"}}>
 
             <div onTouchStart={onTouchStart}>
-                <Typography variant="overline" display="block" gutterBottom>
-                    <UserLink userId={post.createdByUserId} username={post.createdByUsername} />
-                    <span onClick={onClickPostDate} className={styles.postDate}>{displayFullDate ? ` - ${format(postDate, "d/M/yyyy H:mm")} ` : ` - ${formatDistanceToNow(postDate)} ago `}</span>
-                    (<Link href={`${post.url}`} passHref><a data-test-id="post-num">#{post.postNum}</a></Link> of {discussion ? discussion.postCount : "?"})
-                    { isAfter(editDate, postDate) ? <Chip size="small" color="primary" label="Edited" variant="outlined" className={styles.editedChip}></Chip> : <></> }
-                </Typography>
+                <div className={styles.headerRow}>
+                    <Typography variant="overline" display="block" gutterBottom>
+                        <UserLink userId={post.createdByUserId} username={post.createdByUsername} />
+                        <span onClick={onClickPostDate} className={styles.postDate}>{displayFullDate ? ` - ${format(postDate, "d/M/yyyy H:mm")} ` : ` - ${formatDistanceToNow(postDate)} ago `}</span>
+                        (<Link href={`${post.url}`} passHref><a data-test-id="post-num">#{post.postNum}</a></Link> of {discussion ? discussion.postCount : "?"})
+                    </Typography>
+                    { isAfter(editDate, postDate) ? <Tooltip title="Edited"><EditOutlinedIcon color="primary" className={styles.editedFlag} /></Tooltip> : <></> }
+                </div>
 
                 { editMode
                     ? renderEditPost()

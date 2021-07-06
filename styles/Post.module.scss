@@ -115,3 +115,12 @@
         width: 80px;
     }
 }
+
+.headerRow {
+    display: flex;
+    flex-direction: row;
+}
+
+.editedFlag {
+    margin-top: 3px;
+}
