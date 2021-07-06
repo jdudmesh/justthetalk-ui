@@ -57,6 +57,7 @@ import {
     setDiscussionSubscriptionStatus,
     setDiscussionUnread,
     startMergingNewMessages,
+    setCurrentDiscussionBookmark,
 } from "../../../../redux/userActions";
 
 import { selectFolders } from "../../../../redux/folderSlice";
@@ -218,6 +219,18 @@ export default function DiscussionView(props) {
             return;
         }
 
+        if(currentUser && posts && posts.length > 0) {
+            let lastPost = posts[0];
+            if(router.asPath.endsWith("#last")) {
+                lastPost = posts[posts.length - 1];
+            }
+            dispatch(setCurrentDiscussionBookmark({
+                lastPostId: lastPost.id,
+                lastPostCount: lastPost.postNum,
+                lastPostDate: lastPost.createdDate,
+            }));
+        }
+
         let observer = new IntersectionObserver((entries) => {
 
             if(posts.length === 0 || router.asPath.endsWith("#last")) {
@@ -233,7 +246,18 @@ export default function DiscussionView(props) {
             for(let i = 0; i < entries.length; i++) {
                 let entry = entries[i];
                 if(entry.intersectionRatio > 0) {
-                    let nextPostNum = posts[posts.length - 1].postNum + 1;
+
+                    let lastPost = posts[posts.length - 1];
+                    console.log(lastPost.postNum);
+                    if(currentUser) {
+                        dispatch(setCurrentDiscussionBookmark({
+                            lastPostId: lastPost.id,
+                            lastPostCount: lastPost.postNum,
+                            lastPostDate: lastPost.createdDate,
+                        }));
+                    }
+
+                    let nextPostNum = lastPost.postNum + 1;
                     if(nextPostNum <= currentDiscussion.postCount) {
                         document.body.setAttribute("data-userscrollpending", true);
                         let nextUrl = `${currentDiscussion.url}/${nextPostNum}`;

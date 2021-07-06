@@ -34,6 +34,7 @@ const userSlice = createSlice({
         currentFolder: null,
         currentDiscussion: null,
         currentFolderNewMessages: 0,
+        currentBookmark: null,
 
         messageQueue: [],
         mergeQueuedMessages: false,
@@ -86,6 +87,7 @@ const userSlice = createSlice({
             state.currentDiscussion = action.payload;
             state.messageQueue = [];
             state.mergeQueuedMessages = false;
+            state.currentBookmark =  null;
         },
         mergeCurrentFolder: (state, action) => {
             state.currentFolder = { ...state.currentFolder, ...action.payload };
@@ -127,7 +129,10 @@ const userSlice = createSlice({
             let user = {};
             user[action.payload.userId] = action.payload;
             state.otherUserCache = { ...state.otherUserCache, ...user} ;
-        }
+        },
+        setCurrentBookmark: (state, action) => {
+            state.currentBookmark = action.payload;
+        },
     },
 });
 
@@ -155,6 +160,7 @@ export const {
     clearQueuedMessages,
     setOtherUser,
     updateCurrentDiscussionFromLastPost,
+    setCurrentBookmark,
 } = userSlice.actions;
 
 export const selectUserLoadingState = state => state.user.loadingState;

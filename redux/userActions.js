@@ -48,6 +48,7 @@ import { fetchUserAPI,
     fetchOtherUserAPI,
     sendForgotPasswordRequestAPI,
     confirmUserAccountKeyAPI,
+    updateCurrentBookmarkAPI,
 } from "../api";
 
 import {
@@ -70,6 +71,7 @@ import {
     setFolderSubscriptionExceptions,
     setOtherUser,
     updateCurrentDiscussionFromLastPost,
+    setCurrentBookmark,
 } from "./userSlice";
 
 import {
@@ -386,7 +388,7 @@ export const setDiscussionUnread = (discussion) => (dispatch) => {
     setDiscussionUnreadAPI(discussion).then((res) => {
         let posts = res.data.data;
         dispatch(setUserActionState(LoadingState.Loaded));
-        toast.success("Discussion marked unred");
+        toast.success("Discussion marked unread");
     }).catch((err) => {
         console.error(err);
         toast.error("Update failed");
@@ -653,3 +655,20 @@ export const setUserLocation = (folderKey, discussionId, postNum) => (dispatch, 
     // dispatch(clearPosts());
 
 }
+
+export const setCurrentDiscussionBookmark = (nextBookmark) => (dispatch, getState) => {
+
+    const state = getState();
+
+    let currentBookmark = state.user.currentBookmark
+    if(!currentBookmark || (currentBookmark && nextBookmark.lastPostCount > currentBookmark.lastPostCount)) {
+        updateCurrentBookmarkAPI(state.user.currentDiscussion, nextBookmark).then((res) => {
+            dispatch(setCurrentBookmark(res.data.data));
+        }).catch((err) => {
+            console.error(err);
+        });
+
+    }
+
+}
+

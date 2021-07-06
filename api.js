@@ -185,6 +185,8 @@ export const adminUndeletePostAPI = (post) => Api.Delete(`/admin/discussion/${po
 
 export const ignoreUserAPI = (ignoreUserId, shouldIgnore) => Api.Put(`/user/ignore/${ignoreUserId}?state=${shouldIgnore ? 1 : 0}`);
 
+export const setDiscussionUnreadAPI = (discussion) => Api.Delete(`/user/discussion/${discussion.id}/bookmark`);
+export const updateCurrentBookmarkAPI = (discussion, bookmark) => Api.Put(`/user/discussion/${discussion.id}/bookmark`, bookmark);
 export const setFolderSubscriptionStatusAPI = (folder) => Api.Post(`/folder/${folder.id}/subscription`);
 export const unsetFolderSubscriptionStatusAPI = (folder) => Api.Delete(`/folder/${folder.id}/subscription`);
 export const setDiscussionSubscriptionStatusAPI = (discussion) => Api.Post(`/folder/${discussion.folderId}/discussion/${discussion.id}/subscription`);
@@ -204,12 +206,12 @@ export const markUserDiscussionSubsReadAPI = (subs) => Api.Post(`/user/subscript
 export const deleteUserFolderSubsAPI = (subs) => Api.Delete(`/user/subscriptions/folder`, subs);
 export const fetchDiscussionSubscriptionsAPI = () => Api.Get(`/user/subscriptions/discussion`);
 export const deleteUserDiscussionSubsAPI = (subs) => Api.Delete(`/user/subscriptions/discussion`, subs);
-export const setDiscussionUnreadAPI = (discussion) => Api.Delete(`/user/discussion/${discussion.id}/bookmark`);
 export const updateUserPasswordAPI = (credentials) => Api.Put(`/user/password`, credentials);
 export const fetchIgnoredUsersAPI = () => Api.Get(`/user/ignore/list`);
 export const fetchFolderSubscriptionsAPI = () => Api.Get(`/user/subscriptions/folder`);
 export const fetchFolderSubscriptionExceptionsAPI = () => Api.Get(`/user/subscriptions/folder/exceptions`);
 export const updateFolderSubscriptionStatusAPI = (subscriptions) => Api.Post(`/user/subscriptions/folder`, subscriptions);
+
 
 export const fetchOtherUserAPI = (userId) => Api.Get(`/user/${userId}`);
 export const sendForgotPasswordRequestAPI = (credentials) => Api.Post(`/user/forgotpassword`, credentials);
