@@ -217,12 +217,13 @@ export const fetchOtherUserAPI = (userId) => Api.Get(`/user/${userId}`);
 export const sendForgotPasswordRequestAPI = (credentials) => Api.Post(`/user/forgotpassword`, credentials);
 export const fetchSearchResultsAPI = (searchText) => Api.Get(`/search?q=${encodeURIComponent(searchText)}`);
 
-export const openWebsocketAPI = () => {
+export const openWebsocketAPI = (eventListener) => {
 
     let schema = process.env.NEXT_PUBLIC_API_SCHEMA === 'https' ? 'wss' : 'ws';
     sock = new WebSocket(`${schema}://${process.env.NEXT_PUBLIC_API_HOST}/ws`);
 
     sock.addEventListener("open", function (event) {
+        sock.addEventListener("message", eventListener);
         sock.send(`hello!${accessToken}`);
     });
 

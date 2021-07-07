@@ -33,10 +33,20 @@ const frontPageSlice = createSlice({
         },
         updateFrontPageItemsFromBookmark: (state, action) => {
             let bookmark = action.payload;
-            console.log(bookmark);
             let nextItems = state.items.map( item => {
                 if(item.discussionId === bookmark.discussionId) {
                     return { ...item, lastPostReadCount: bookmark.lastPostCount, lastPostReadDate: bookmark.lastPostRead, lastPostReadId: bookmark.lastPostId }
+                } else {
+                    return item;
+                }
+            });
+            state.items = [...nextItems];
+        },
+        updateFrontPageItemsFromPost: (state, action) => {
+            let post = action.payload;
+            let nextItems = state.items.map( item => {
+                if(item.discussionId === post.discussionId && post.postNum > item.postCount) {
+                    return { ...item, postCount: post.postNum }
                 } else {
                     return item;
                 }
@@ -63,7 +73,7 @@ const frontPageSlice = createSlice({
     },
 });
 
-export const { setFrontpageSubscriptions, mergeFrontpageSubscriptionUpdate, appendFrontPageItems, updateFrontPageItemsFromBookmark, clearFrontPageItems, setFrontPageLoadingState, setFrontPageActionState, setMaxPages } = frontPageSlice.actions
+export const { setFrontpageSubscriptions, mergeFrontpageSubscriptionUpdate, appendFrontPageItems, updateFrontPageItemsFromBookmark, updateFrontPageItemsFromPost, clearFrontPageItems, setFrontPageLoadingState, setFrontPageActionState, setMaxPages } = frontPageSlice.actions
 export const selectFrontPageLoadingState = state => state.frontPage.loadingState;
 export const selectFrontPageItems = state => state.frontPage.items;
 export const selectFrontPageMaxPages = state => state.frontPage.maxPages;

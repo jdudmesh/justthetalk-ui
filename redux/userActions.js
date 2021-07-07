@@ -90,6 +90,7 @@ import {
 import {
     clearFrontPageItems,
     updateFrontPageItemsFromBookmark,
+    updateFrontPageItemsFromPost,
 } from "./frontPageSlice";
 
 import {
@@ -103,13 +104,18 @@ import {
 
 import { LoadingState } from './constants';
 
+let sock = null;
+
 export const createWebsocket = () => (dispatch, getState) => {
 
-    const sock = openWebsocketAPI();
-
-    sock.addEventListener("message", function (event) {
+    const eventListener = (event) => {
 
         let state = getState();
+
+        if(event.data === "ping!") {
+            sock.send("pong!");
+            return;
+        }
 
         let post = JSON.parse(event.data);
 
@@ -128,6 +134,8 @@ export const createWebsocket = () => (dispatch, getState) => {
             dispatch(incrementCurrentFolderNewMessages());
         }
 
+        dispatch(updateFrontPageItemsFromPost(post));
+
         const exists = state.frontPage.frontpageSubscriptions.some(x => x.discussionId == post.discussionId);
         if(exists) {
             dispatch(mergeFrontpageSubscriptionUpdate(post));
@@ -135,7 +143,9 @@ export const createWebsocket = () => (dispatch, getState) => {
             dispatch(fetchFrontPageSubscriptions());
         }
 
-    });
+    }
+
+    sock = openWebsocketAPI(eventListener);
 
 }
 
