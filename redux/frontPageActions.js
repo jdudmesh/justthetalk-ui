@@ -22,7 +22,7 @@ import { fetchFrontPageAPI } from '../api';
 
 import {
     setFrontpageSubscriptions,
-    appendItems,
+    appendFrontPageItems,
     setFrontPageLoadingState,
     setMaxPages
 } from './frontPageSlice';
@@ -45,7 +45,7 @@ export const fetchFrontPage = (viewType, start) => (dispatch, getState) => {
             if(items.length < size) {
                 dispatch(setMaxPages(start));
             }
-            dispatch(appendItems(items));
+            dispatch(appendFrontPageItems(items));
         } else {
             dispatch(setMaxPages(start - 1));
         }

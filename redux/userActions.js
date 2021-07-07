@@ -89,6 +89,7 @@ import {
 
 import {
     clearFrontPageItems,
+    updateFrontPageItemsFromBookmark,
 } from "./frontPageSlice";
 
 import {
@@ -663,7 +664,9 @@ export const setCurrentDiscussionBookmark = (nextBookmark) => (dispatch, getStat
     let currentBookmark = state.user.currentBookmark
     if(!currentBookmark || (currentBookmark && nextBookmark.lastPostCount > currentBookmark.lastPostCount)) {
         updateCurrentBookmarkAPI(state.user.currentDiscussion, nextBookmark).then((res) => {
-            dispatch(setCurrentBookmark(res.data.data));
+            let bookmark = res.data.data;
+            dispatch(setCurrentBookmark(bookmark));
+            dispatch(updateFrontPageItemsFromBookmark(bookmark));
         }).catch((err) => {
             console.error(err);
         });

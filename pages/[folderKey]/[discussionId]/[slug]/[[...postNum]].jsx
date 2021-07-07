@@ -248,7 +248,6 @@ export default function DiscussionView(props) {
                 if(entry.intersectionRatio > 0) {
 
                     let lastPost = posts[posts.length - 1];
-                    console.log(lastPost.postNum);
                     if(currentUser) {
                         dispatch(setCurrentDiscussionBookmark({
                             lastPostId: lastPost.id,

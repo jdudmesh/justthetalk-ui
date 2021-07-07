@@ -87,11 +87,17 @@ export default function Home(props) {
     }, []);
 
     useEffect(() => {
-        if(!currentUser) {
+        if(currentUserLoadingState !== LoadingState.Loaded) {
             return;
         }
-        dispatch(fetchFrontPageSubscriptions());
-    }, [currentUser]);
+        if(discussions.length == 0) {
+            dispatch(fetchFrontPage(viewType, 0));
+        }
+        if(currentUser) {
+            dispatch(fetchFrontPageSubscriptions());
+        }
+
+    }, [currentUserLoadingState, currentUser, viewType]);
 
     useEffect(() => {
 
@@ -139,7 +145,6 @@ export default function Home(props) {
                 setViewTitle("Started by me");
                 break;
         }
-        dispatch(fetchFrontPage(viewType, 0));
     }, [viewType, currentUserLoadingState]);
 
     const onClickMenu = (key) => {
