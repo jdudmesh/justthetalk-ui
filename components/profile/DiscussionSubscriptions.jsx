@@ -47,7 +47,8 @@ export function DiscussionSubscriptions() {
             field: 'title',
             headerName: 'Discussion',
             flex: 1,
-            renderCell: (params) => <Link href={params.row.url} passHref><a className="discussion-link">{htmlDecode(params.row.discussionTitle)}</a></Link>
+            renderCell: (params) => <Link href={params.row.url} passHref><a className="discussion-link">{htmlDecode(params.row.discussionTitle)}</a></Link>,
+            valueGetter: (params) => params.row.discussionTitle
         },
         {
             field: 'unreadCount',
