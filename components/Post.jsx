@@ -40,10 +40,11 @@ import Chip from '@material-ui/core/Chip';
 
 import { useMediaQuery } from "react-responsive";
 
-import { Alert } from "../components/Alert";
-import { UserLink } from "../components/UserLink";
-import { PostReport } from "../components/PostReport";
-import { PostComment } from "../components/PostComment";
+import { Alert } from "./Alert";
+import { UserLink } from "./UserLink";
+import { PostReport } from "./PostReport";
+import { PostComment } from "./PostComment";
+import { ConfirmationDialog } from "./ConfirmationDialog";
 
 
 import styles from '../styles/Post.module.scss'
@@ -89,6 +90,8 @@ export function Post({post, discussion, blockedUsers, onReport, readOnly}) {
 
     const [messageText, setMessageText] = useState("");
     const [messageError, setMessageError] = useState("");
+
+    const [confirmationParams, setConfirmationParams] = useState({open: false, title: "", text: "", onClose: null });
 
     const postDate = useMemo(() => parseISO(post.createdDate), [post]);
     const editDate = useMemo(() => parseISO(post.lastEditDate), [post]);
@@ -149,11 +152,31 @@ export function Post({post, discussion, blockedUsers, onReport, readOnly}) {
     }
 
     const onDeletePost = () => {
-        dispatch(deletePost(discussion, post));
+        setConfirmationParams({
+            open: true,
+            title: "Delete post",
+            text: "Are you sure you want to delete this post?",
+            onClose: (confirmed) => {
+                setConfirmationParams({open: false});
+                if(confirmed) {
+                    dispatch(deletePost(discussion, post));
+                }
+            }
+        });
     }
 
     const onIgnoreUser = () => {
-        dispatch(ignoreUser(post.createdByUserId, true));
+        setConfirmationParams({
+            open: true,
+            title: "Ignore user",
+            text: `Are you sure you want to ignore ${post.createdByUsername}?`,
+            onClose: (confirmed) => {
+                setConfirmationParams({open: false});
+                if(confirmed) {
+                    dispatch(ignoreUser(post.createdByUserId, true));
+                }
+            }
+        });
     }
 
     const onAdminBlockUser = () => {
@@ -434,6 +457,7 @@ export function Post({post, discussion, blockedUsers, onReport, readOnly}) {
 
     return <div data-test-id="post">
         {renderByStatus()}
+        <ConfirmationDialog params={confirmationParams} />
     </div>
 
 }
