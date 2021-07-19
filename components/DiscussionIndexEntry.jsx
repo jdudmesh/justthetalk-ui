@@ -35,7 +35,7 @@ export function DiscussionIndexEntry({discussion, folder}) {
                     : <></>
                 }
             </div>
-            <Typography variant="overline" display="block" gutterBottom>{formatDistanceToNow(new Date(discussion.lastPostDate))} ago ({discussion.postCount - discussion.lastPostReadCount} new of {discussion.postCount} posts)</Typography>
+            <Typography variant="overline" display="block" gutterBottom>{formatDistanceToNow(new Date(discussion.lastPostDate))} ago ({discussion.postCount} posts, {discussion.postCount - discussion.lastPostReadCount} new)</Typography>
         </div>
     </div>);
 
