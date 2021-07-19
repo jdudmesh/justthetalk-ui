@@ -104,16 +104,21 @@ import {
 
 import { LoadingState } from './constants';
 
-let sock = null;
-
 export const createWebsocket = () => (dispatch, getState) => {
 
     const eventListener = (event) => {
 
         let state = getState();
 
-        if(event.data === "ping!") {
-            sock.send("pong!");
+        switch(event.data) {
+        case "ping!":
+            event.target.send("pong!");
+            return;
+        case "ack!":
+            console.info("websocket connected");
+            return;
+        case "nack!":
+            console.error("websocket hello failed");
             return;
         }
 
@@ -145,7 +150,7 @@ export const createWebsocket = () => (dispatch, getState) => {
 
     }
 
-    sock = openWebsocketAPI(eventListener);
+    openWebsocketAPI(eventListener);
 
 }
 

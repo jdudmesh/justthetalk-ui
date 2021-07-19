@@ -217,17 +217,44 @@ export const fetchOtherUserAPI = (userId) => Api.Get(`/user/${userId}`);
 export const sendForgotPasswordRequestAPI = (credentials) => Api.Post(`/user/forgotpassword`, credentials);
 export const fetchSearchResultsAPI = (searchText) => Api.Get(`/search?q=${encodeURIComponent(searchText)}`);
 
+
+let lastMessageTime = null;
+
+const retryWebsocket = (eventListener) => {
+    let p = new Promise((resolve) => setTimeout(resolve, 5000));
+    p.then(() => {
+        openWebsocketAPI(eventListener);
+    });
+}
+
 export const openWebsocketAPI = (eventListener) => {
 
     let schema = process.env.NEXT_PUBLIC_API_SCHEMA === 'https' ? 'wss' : 'ws';
     sock = new WebSocket(`${schema}://${process.env.NEXT_PUBLIC_API_HOST}/ws`);
 
+    sock.addEventListener("message", (msg) => {
+        lastMessageTime = new Date();
+        eventListener(msg)
+    });
+
     sock.addEventListener("open", function (event) {
-        sock.addEventListener("message", eventListener);
+        console.info("websocket open")
         sock.send(`hello!${accessToken}`);
     });
 
-    return sock;
+    sock.addEventListener("error", (err) => {
+        console.error(err);
+        retryWebsocket(eventListener);
+    });
+
+    setInterval(() => {
+        let now = new Date()
+        if(!lastMessageTime || now.getTime() - lastMessageTime.getTime() > 60000) {
+            console.warn("websocket timeout")
+            retryWebsocket(eventListener);
+        }
+    }, 30000);
+
 
 }
 
