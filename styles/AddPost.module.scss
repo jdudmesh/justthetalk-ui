@@ -52,3 +52,9 @@
     margin-bottom: 5px;
     color: red;
 }
+
+.postTextInput {
+    textarea {
+        resize: vertical;
+    }
+}

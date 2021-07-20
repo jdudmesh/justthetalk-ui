@@ -139,7 +139,8 @@ export function AddPost({discussion, isEditing}) {
                 onChange={onChangeMessage}
                 onFocus={onFocus}
                 onBlur={onBlur}
-                inputProps={{maxLength: "8192", "data-test-id": "post-text"}}>
+                inputProps={{maxLength: "8192", "data-test-id": "post-text"}}
+                className={styles.postTextInput}>
             </TextField>
 
             { messageError.length > 0 ? (<div className={styles.messageError}>{messageError}</div>) : (<></>) }
