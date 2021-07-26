@@ -157,6 +157,8 @@ export function Paging({onNavigate}) {
                     { nextButton() }
                 </>
                 : <>
+                    { homeButton() }
+                    { upButton() }
                     { checkButton() }
                     { lastButton() }
                     { prevButton() }
