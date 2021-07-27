@@ -323,29 +323,29 @@ export default function DiscussionView(props) {
         // let beginPostNum = posts[0].postNum;
         // let endPostNum = posts[posts.length - 1].postNum;
         let lastPostNum = postNum ? parseInt(postNum[0]) : posts[0].postNum;
-        let nextPostNum = "";
+        let nextPath = "";
         let fragment = "";
 
         switch(direction) {
             case "first":
-                nextPostNum = "/1";
+                nextPath = "/1";
                 break;
             case "last":
-                nextPostNum = `/${currentDiscussion.postCount - pageSize + 1}`;
+                nextPath = `/${Math.max(1, currentDiscussion.postCount - pageSize + 1)}`;
                 fragment = "#last";
                 break;
             case "next":
-                nextPostNum = `/${Math.min(currentDiscussion.postCount, lastPostNum + pageSize)}`;
+                nextPath = `/${Math.min(currentDiscussion.postCount, lastPostNum + pageSize)}`;
                 break;
             case "prev":
-                nextPostNum = `/${Math.max(1, lastPostNum - pageSize)}`;
+                nextPath = `/${Math.max(1, lastPostNum - pageSize)}`;
                 break;
             case "check":
                 dispatch(fetchPosts(currentDiscussion));
                 break;
         }
 
-        let nextUrl = `${currentDiscussion.url}${nextPostNum}${fragment}`;
+        let nextUrl = `${currentDiscussion.url}${nextPath}${fragment}`;
         router.push(nextUrl, undefined, {shallow: true});
 
     }

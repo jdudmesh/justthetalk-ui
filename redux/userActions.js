@@ -106,23 +106,11 @@ import { LoadingState } from './constants';
 
 export const createWebsocket = () => (dispatch, getState) => {
 
-    const eventListener = (event) => {
+    const eventListener = (message) => {
 
         let state = getState();
 
-        switch(event.data) {
-        case "ping!":
-            event.target.send("pong!");
-            return;
-        case "ack!":
-            console.info("websocket connected");
-            return;
-        case "nack!":
-            console.error("websocket hello failed");
-            return;
-        }
-
-        let post = JSON.parse(event.data);
+        let post = JSON.parse(message);
 
         if(state.user.currentDiscussion && post.discussionId === state.user.currentDiscussion.id) {
 

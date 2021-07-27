@@ -219,6 +219,9 @@ export const fetchSearchResultsAPI = (searchText) => Api.Get(`/search?q=${encode
 
 
 let lastMessageTime = null;
+let pingCount = 0;
+let pingTimer = null;
+let timeoutSentinelTimer = null;
 
 const retryWebsocket = (eventListener) => {
     let p = new Promise((resolve) => setTimeout(resolve, 5000));
@@ -229,17 +232,53 @@ const retryWebsocket = (eventListener) => {
 
 export const openWebsocketAPI = (eventListener) => {
 
+    if(pingTimer) {
+        clearInterval(pingTimer);
+        pingTimer = null;
+    }
+
+    if(timeoutSentinelTimer) {
+        clearInterval(timeoutSentinelTimer);
+        timeoutSentinelTimer = null;
+    }
+
     let schema = process.env.NEXT_PUBLIC_API_SCHEMA === 'https' ? 'wss' : 'ws';
     sock = new WebSocket(`${schema}://${process.env.NEXT_PUBLIC_API_HOST}/ws`);
 
-    sock.addEventListener("message", (msg) => {
+    sock.addEventListener("message", (event) => {
+
         lastMessageTime = new Date();
-        eventListener(msg)
+
+        switch(event.data) {
+        case "ping!":
+            console.debug("got ping", new Date());
+            event.target.send("pong!");
+            break;
+        case "pong!":
+            console.debug("got pong");
+            break;
+        case "ack!":
+            console.info("websocket connected");
+            break;
+        case "nack!":
+            console.error("websocket hello failed");
+            break;
+        default:
+            eventListener(event.data);
+        }
+
     });
 
     sock.addEventListener("open", function (event) {
         console.info("websocket open")
-        sock.send(`hello!${accessToken}`);
+        event.target.send(`hello!${accessToken}`);
+        pingTimer = setInterval(() => {
+            if(pingCount % 2 === 0) {
+                console.debug("ping", pingCount);
+                event.target.send("ping!");
+            }
+            pingCount++;
+        }, 30000);
     });
 
     sock.addEventListener("error", (err) => {
@@ -247,10 +286,10 @@ export const openWebsocketAPI = (eventListener) => {
         retryWebsocket(eventListener);
     });
 
-    setInterval(() => {
+    timeoutSentinelTimer = setInterval(() => {
         let now = new Date()
-        if(!lastMessageTime || now.getTime() - lastMessageTime.getTime() > 60000) {
-            console.warn("websocket timeout")
+        if(!lastMessageTime || now.getTime() - lastMessageTime.getTime() > 90000) {
+            console.warn("websocket timeout", lastMessageTime, now);
             retryWebsocket(eventListener);
         }
     }, 30000);
@@ -259,6 +298,7 @@ export const openWebsocketAPI = (eventListener) => {
 }
 
 export const closeWebsocketAPI = () => {
+    console.warn("closing websocket");
     if(sock) {
         sock.close();
         sock = null;
