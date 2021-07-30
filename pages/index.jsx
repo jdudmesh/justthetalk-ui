@@ -90,9 +90,8 @@ export default function Home(props) {
         if(currentUserLoadingState !== LoadingState.Loaded) {
             return;
         }
-        if(discussions.length == 0) {
-            dispatch(fetchFrontPage(viewType, 0));
-        }
+
+        dispatch(fetchFrontPage(viewType, 0));
         if(currentUser) {
             dispatch(fetchFrontPageSubscriptions());
         }
