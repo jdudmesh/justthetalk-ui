@@ -115,7 +115,7 @@ export default function MasterLayout({title, leftContent, children}) {
             <div className={styles.centreColumn}>
                 { isNarrowWindow && router.pathname !== "/login"
                     ? <div className={styles.narrowWidthLoginButtons}>
-                        <LoginButtons user={currentUser} />
+                        <LoginButtons user={currentUser} loadingState={userLoadingState}/>
                     </div>
                     : <></>
                 }
