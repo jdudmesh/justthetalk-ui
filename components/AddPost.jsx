@@ -149,7 +149,9 @@ export function AddPost({discussion, isEditing}) {
                     <Button variant="contained" color="primary" onClick={onPostMessage} data-test-id="create-post">Post Reply&#8230;</Button>
                 </div>
                 <div>
-                    <div><FormControlLabel label="Subscribe" control={<Checkbox color="primary" checked={subscribe} onChange={onChangeSubscribe} data-test-id="subscribe-discussion"></Checkbox>} /></div>
+                    {/*
+                        <div><FormControlLabel label="Subscribe" control={<Checkbox color="primary" checked={subscribe} onChange={onChangeSubscribe} data-test-id="subscribe-discussion"></Checkbox>} /></div>
+                    */}
                     { currentUser.isAdmin
                         ? <div><FormControlLabel label="Post as JUSTtheTalk" control={<Checkbox color="secondary" checked={postAsAdmin} onChange={onChangePostAsAdmin}></Checkbox>} /></div>
                         : <></>
