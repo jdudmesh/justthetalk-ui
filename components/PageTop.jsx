@@ -23,7 +23,7 @@ import { useSelector } from "react-redux";
 import { Toolbar, IconButton, Divider } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 
-import { selectUser } from "../redux/userSlice";
+import { selectUser, selectUserLoadingState } from "../redux/userSlice";
 
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -32,7 +32,8 @@ import PersonIcon from "@material-ui/icons/Person";
 
 import { useMediaQuery } from "react-responsive";
 
-import { LoginButtons } from ".//LoginButtons";
+import { LoginButtons } from "./LoginButtons";
+
 import styles from "../styles/PageTop.module.scss";
 
 export function PageTop({title, onShowFolderView, hasLeftDrawer, leftDrawerState}) {
@@ -40,6 +41,7 @@ export function PageTop({title, onShowFolderView, hasLeftDrawer, leftDrawerState
     const router = useRouter();
 
     const currentUser = useSelector(selectUser);
+    const userLoadingState = useSelector(selectUserLoadingState);
 
     const [anchorEl, setAnchorEl] = useState();
 
@@ -141,7 +143,7 @@ export function PageTop({title, onShowFolderView, hasLeftDrawer, leftDrawerState
 
                     <div className={styles.appButtons}>
                         { !isNarrowWindow
-                            ? <LoginButtons user={currentUser} />
+                            ? <LoginButtons user={currentUser} loadingState={userLoadingState}/>
                             : <></>
                         }
                         { renderProfileButton() }

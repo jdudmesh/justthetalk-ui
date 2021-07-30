@@ -14,10 +14,10 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import { Button } from "@material-ui/core";
+import { LoadingState } from "../redux/constants";
+export function LoginButtons({user, loadingState}) {
 
-export function LoginButtons({user}) {
-
-    if(!user) {
+    if(loadingState == LoadingState.Loaded && !user) {
         return <>
             <Button variant="outlined" color="inherit" href="/login" data-test-id="login-button">Login</Button>
             <span> or </span>
