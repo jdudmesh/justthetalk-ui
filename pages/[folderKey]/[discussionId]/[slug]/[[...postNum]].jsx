@@ -220,14 +220,15 @@ export default function DiscussionView(props) {
         }
 
         if(currentUser && posts && posts.length > 0) {
-            let lastPost = posts[0];
-            if(router.asPath.endsWith("#last")) {
-                lastPost = posts[posts.length - 1];
+            let bookmarkPost = posts[0];
+            let lastPost = posts[posts.length - 1];
+            if(lastPost.id === currentDiscussion.lastPostId) {
+                bookmarkPost = lastPost;
             }
             dispatch(setCurrentDiscussionBookmark({
-                lastPostId: lastPost.id,
-                lastPostCount: lastPost.postNum,
-                lastPostDate: lastPost.createdDate,
+                lastPostId: bookmarkPost.id,
+                lastPostCount: bookmarkPost.postNum,
+                lastPostDate: bookmarkPost.createdDate,
             }));
         }
 
