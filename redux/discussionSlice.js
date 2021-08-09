@@ -53,10 +53,26 @@ const discussionSlice = createSlice({
             state.actionState = LoadingState.Pending;
             state.actionError = "";
         },
+        updateDiscussionItemsFromPost: (state, action) => {
+            let post = action.payload;
+            let nextItems = state.items.map( item => {
+                if(item.discussionId === post.discussionId && post.postNum > item.postCount) {
+                    return { ...item,
+                        postCount: post.postNum,
+                        lastPostDate: post.createdDate,
+                        lastPostId: post.id,
+                        lastPostReadCount: post.postNum,
+                    }
+                } else {
+                    return item;
+                }
+            });
+            state.items = [...nextItems];
+        },
     },
 });
 
-export const { appendDiscussions, clearDiscussions, clearCreatedDiscussion, setDiscussionLoadingState, setDiscussionActionState, setDiscussionActionError, clearDiscussionActionState } = discussionSlice.actions
+export const { appendDiscussions, clearDiscussions, clearCreatedDiscussion, setDiscussionLoadingState, setDiscussionActionState, setDiscussionActionError, clearDiscussionActionState, updateDiscussionItemsFromPost } = discussionSlice.actions
 
 export const selectDiscussionLoadingState = state => state.discussion.loadingState;
 export const selectDiscussionActionState = state => state.discussion.actionState;

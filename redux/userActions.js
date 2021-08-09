@@ -102,6 +102,10 @@ import {
     setBlockedUsers
 } from "./adminSlice";
 
+import {
+    updateDiscussionItemsFromPost
+} from "./discussionSlice";
+
 import { LoadingState } from './constants';
 
 export const createWebsocket = () => (dispatch, getState) => {
@@ -118,6 +122,13 @@ export const createWebsocket = () => (dispatch, getState) => {
                 if(state.user.mergeQueuedMessages) {
                     dispatch(updateCurrentDiscussionFromLastPost(post));
                     dispatch(mergePosts([post]));
+
+                    dispatch(setCurrentDiscussionBookmark({
+                        lastPostId: post.id,
+                        lastPostCount: post.postNum,
+                        lastPostDate: post.createdDate,
+                    }));
+
                 } else {
                     dispatch(enqueueMessage(post));
                 }
@@ -128,6 +139,7 @@ export const createWebsocket = () => (dispatch, getState) => {
         }
 
         dispatch(updateFrontPageItemsFromPost(post));
+        dispatch(updateDiscussionItemsFromPost(post));
 
         const exists = state.frontPage.frontpageSubscriptions.some(x => x.discussionId == post.discussionId);
         if(exists) {

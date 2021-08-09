@@ -20,6 +20,8 @@ import { LoadingState } from "./constants";
 import { fetchPostsAPI, createPostAPI, editPostAPI, deletePostAPI } from "../api";
 import { mergeCurrentDiscussion, clearQueuedMessages } from "./userSlice";
 import { mergePosts, setPostActionError, setPostLoadingState, setPostActionState } from "./postSlice";
+import { updateDiscussionItemsFromPost } from "./discussionSlice";
+import { updateFrontPageItemsFromPost } from "./frontPageSlice";
 
 export const fetchPosts = (discussion, postNum, customPageSize) => (dispatch, getState) => {
 
@@ -66,6 +68,9 @@ export const createPost = (discussion, text, postAsAdmin, subscribeToDiscussion)
                 dispatch(mergePosts(posts));
                 dispatch(setPostActionError(""));
                 dispatch(setPostActionState(LoadingState.Loaded));
+                dispatch(updateFrontPageItemsFromPost(lastPost));
+                dispatch(updateDiscussionItemsFromPost(lastPost));
+
             } else {
                 dispatch(setPostActionError("Failed to save comment"));
                 dispatch(setPostActionState(LoadingState.Failed));
