@@ -186,7 +186,7 @@ export const adminUndeletePostAPI = (post) => Api.Delete(`/admin/discussion/${po
 export const ignoreUserAPI = (ignoreUserId, shouldIgnore) => Api.Put(`/user/ignore/${ignoreUserId}?state=${shouldIgnore ? 1 : 0}`);
 
 export const setDiscussionUnreadAPI = (discussion) => Api.Delete(`/user/discussion/${discussion.id}/bookmark`);
-export const updateCurrentBookmarkAPI = (discussion, bookmark) => Api.Put(`/user/discussion/${discussion.id}/bookmark`, bookmark);
+export const updateCurrentBookmarkAPI = (discussion, bookmarkedPost) => Api.Put(`/user/discussion/${discussion.id}/bookmark`, bookmarkedPost);
 export const setFolderSubscriptionStatusAPI = (folder) => Api.Post(`/folder/${folder.id}/subscription`);
 export const unsetFolderSubscriptionStatusAPI = (folder) => Api.Delete(`/folder/${folder.id}/subscription`);
 export const setDiscussionSubscriptionStatusAPI = (discussion) => Api.Post(`/folder/${discussion.folderId}/discussion/${discussion.id}/subscription`);

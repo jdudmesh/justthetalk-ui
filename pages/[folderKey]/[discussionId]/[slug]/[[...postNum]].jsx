@@ -225,11 +225,7 @@ export default function DiscussionView(props) {
             if(lastPost.id === currentDiscussion.lastPostId) {
                 bookmarkPost = lastPost;
             }
-            dispatch(setCurrentDiscussionBookmark({
-                lastPostId: bookmarkPost.id,
-                lastPostCount: bookmarkPost.postNum,
-                lastPostDate: bookmarkPost.createdDate,
-            }));
+            dispatch(setCurrentDiscussionBookmark(bookmarkPost));
         }
 
         let observer = new IntersectionObserver((entries) => {
@@ -250,11 +246,7 @@ export default function DiscussionView(props) {
 
                     let lastPost = posts[posts.length - 1];
                     if(currentUser) {
-                        dispatch(setCurrentDiscussionBookmark({
-                            lastPostId: lastPost.id,
-                            lastPostCount: lastPost.postNum,
-                            lastPostDate: lastPost.createdDate,
-                        }));
+                        dispatch(setCurrentDiscussionBookmark(lastPost));
                     }
 
                     let nextPostNum = lastPost.postNum + 1;
@@ -442,7 +434,7 @@ export default function DiscussionView(props) {
 
     const renderPosts = () => {
 
-        if(posts.length === 0 && fetchPostsState === LoadingState.Loaded) {
+        if(currentDiscussion && currentDiscussion.postCount === 0) {
             return <Alert severity="info" className={styles.userAlert}>Nobody has posted on this thread yet.</Alert>
         } else {
             return <>{
