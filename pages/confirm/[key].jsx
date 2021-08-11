@@ -23,15 +23,15 @@ import { FormControl, TextField, Button, Card, Paper, Typography, Link } from "@
 
 import ReCAPTCHA from "react-google-recaptcha";
 
-import WidePageLayout from "../layouts/widepage";
-import { Alert } from "../components/Alert";
+import WidePageLayout from "../../layouts/widepage";
+import { Alert } from "../../components/Alert";
 
-import styles from "../styles/Login.module.scss";
+import styles from "../../styles/Login.module.scss";
 
-import { confirmUserAccountKey } from "../redux/userActions";
-import { selectUser, selectUserLoadingState, selectUserActionState, selectUserActionError, clearUserActionState } from "../redux/userSlice";
+import { confirmUserAccountKey } from "../../redux/userActions";
+import { selectUser, selectUserLoadingState, selectUserActionState, selectUserActionError, clearUserActionState } from "../../redux/userSlice";
 
-import { LoadingState } from "../redux/constants";
+import { LoadingState } from "../../redux/constants";
 
 export default function ConfirmSignup() {
 
@@ -88,10 +88,4 @@ export default function ConfirmSignup() {
         </div>
     </WidePageLayout>
 
-}
-
-export async function getStaticProps(context) {
-    return {
-        props: {},
-    }
 }
