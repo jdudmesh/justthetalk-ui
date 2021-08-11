@@ -40,6 +40,7 @@ export default function ConfirmSignup() {
 
     const { key } = router.query;
 
+    const currentUser = useSelector(selectUser);
     const loadingState = useSelector(selectUserLoadingState);
     const actionError = useSelector(selectUserActionError);
     const [errorText, setErrorText] = useState("");
