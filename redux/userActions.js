@@ -102,6 +102,10 @@ import {
     setBlockedUsers
 } from "./adminSlice";
 
+import {
+    updateDiscussionItemsFromPost
+} from "./discussionSlice";
+
 import { LoadingState } from './constants';
 
 export const createWebsocket = () => (dispatch, getState) => {
@@ -118,6 +122,9 @@ export const createWebsocket = () => (dispatch, getState) => {
                 if(state.user.mergeQueuedMessages) {
                     dispatch(updateCurrentDiscussionFromLastPost(post));
                     dispatch(mergePosts([post]));
+
+                    dispatch(setCurrentDiscussionBookmark(post));
+
                 } else {
                     dispatch(enqueueMessage(post));
                 }
@@ -128,6 +135,7 @@ export const createWebsocket = () => (dispatch, getState) => {
         }
 
         dispatch(updateFrontPageItemsFromPost(post));
+        dispatch(updateDiscussionItemsFromPost(post));
 
         const exists = state.frontPage.frontpageSubscriptions.some(x => x.discussionId == post.discussionId);
         if(exists) {
@@ -660,13 +668,13 @@ export const setUserLocation = (folderKey, discussionId, postNum) => (dispatch, 
 
 }
 
-export const setCurrentDiscussionBookmark = (nextBookmark) => (dispatch, getState) => {
+export const setCurrentDiscussionBookmark = (bookmarkedPost) => (dispatch, getState) => {
 
     const state = getState();
 
     let currentBookmark = state.user.currentBookmark
-    if(!currentBookmark || (currentBookmark && nextBookmark.lastPostCount > currentBookmark.lastPostCount)) {
-        updateCurrentBookmarkAPI(state.user.currentDiscussion, nextBookmark).then((res) => {
+    if(!currentBookmark || (currentBookmark && bookmarkedPost.postNum > currentBookmark.lastPostCount)) {
+        updateCurrentBookmarkAPI(state.user.currentDiscussion, bookmarkedPost).then((res) => {
             let bookmark = res.data.data;
             dispatch(setCurrentBookmark(bookmark));
             dispatch(updateFrontPageItemsFromBookmark(bookmark));
