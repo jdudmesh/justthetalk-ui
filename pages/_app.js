@@ -12,7 +12,7 @@
 
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-
+import Head from 'next/head'
 import store from "../redux/store";
 import { Provider } from "react-redux";
 import { fetchUser } from "../redux/userActions";
@@ -45,15 +45,19 @@ const localTheme = createMuiTheme({
 function MyApp({ Component, pageProps }) {
 
     const state = store.getState();
-    if(state.user.loadingState === LoadingState.Pending) {
+    if (state.user.loadingState === LoadingState.Pending) {
         store.dispatch(fetchUser());
     }
 
-    return ( <Provider store={store}>
+    return <Provider store={store}>
         <ThemeProvider theme={localTheme}>
-            <Component {...pageProps }/>
+            <Head>
+                <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes" />
+            </Head>
+
+            <Component {...pageProps} />
         </ThemeProvider>
-    </Provider >)
+    </Provider >
 
 }
 

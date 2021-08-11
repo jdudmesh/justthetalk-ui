@@ -122,9 +122,7 @@ export const createWebsocket = () => (dispatch, getState) => {
                 if(state.user.mergeQueuedMessages) {
                     dispatch(updateCurrentDiscussionFromLastPost(post));
                     dispatch(mergePosts([post]));
-
                     dispatch(setCurrentDiscussionBookmark(post));
-
                 } else {
                     dispatch(enqueueMessage(post));
                 }
@@ -156,8 +154,8 @@ export const startMergingNewMessages = () => (dispatch, getState) => {
         dispatch(updateCurrentDiscussionFromLastPost(state.user.messageQueue[state.user.messageQueue.length - 1]));
     }
     dispatch(mergePosts(state.user.messageQueue));
-    dispatch(setMergeQueuedMessages(true));
     dispatch(clearQueuedMessages());
+    dispatch(setMergeQueuedMessages(true));
 }
 
 const handleUserDetailsSuccess = (dispatch) => (user) => {

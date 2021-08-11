@@ -120,7 +120,6 @@ const userSlice = createSlice({
         },
         clearQueuedMessages: (state, action) => {
             state.messageQueue = [];
-            state.mergeQueuedMessages = false;
         },
         setMergeQueuedMessages: (state, action) => {
             state.mergeQueuedMessages = action.payload;
