@@ -393,7 +393,11 @@ export function Post({post, discussion, blockedUsers, onReport, readOnly}) {
 
     const renderPost = () => {
 
-        return <div id={`post_${post.id}`} className={[styles.postContainer, "post"].join(" ")} onMouseOver={onMouseOver} onMouseOut={onMouseOut} style={{backgroundColor: isHighlight ? "#f5f5f5" : "inherit"}}>
+        let postStyles = [styles.postContainer, "post"];
+        if(isHighlight) {
+            postStyles.push(styles.postHighlighted)
+        }
+        return <div id={`post_${post.id}`} className={postStyles.join(" ")} onMouseOver={onMouseOver} onMouseOut={onMouseOut} >
 
             <div onTouchStart={onTouchStart}>
                 <div className={styles.headerRow}>

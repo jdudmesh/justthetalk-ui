@@ -41,7 +41,7 @@
 
 .discussionHeader {
     margin-bottom: 10px;
-    background-color: #f5f5f5;
+    background-color: #f0f0f0;
     border-radius: 10px;
     padding: 10px;
     display: flex;
@@ -51,9 +51,9 @@
 
 .discussionHeaderContent {
     flex: 1;
-    p {
-        margin: 0.33rem;
-    }
+    // p {
+    //     margin: 0.33rem;
+    // }
 }
 
 .discussionHeaderMenu {
