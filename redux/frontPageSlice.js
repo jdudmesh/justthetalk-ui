@@ -17,6 +17,26 @@ import { createSlice } from '@reduxjs/toolkit'
 
 import { LoadingState } from './constants';
 
+const getNextFrontPageItemsFromBookmark = (bookmark, currentItems) => {
+    return currentItems.map( item => {
+        if(item.discussionId === bookmark.discussionId) {
+            return { ...item, lastPostReadCount: bookmark.lastPostCount, lastPostReadDate: bookmark.lastPostRead, lastPostReadId: bookmark.lastPostId }
+        } else {
+            return item;
+        }
+    });
+}
+
+const getNextFrontPageItemsFromPost = (post, currentItems) => {
+    return currentItems.map( item => {
+        if(item.discussionId === post.discussionId && post.postNum > item.postCount) {
+            return { ...item, postCount: post.postNum }
+        } else {
+            return item;
+        }
+    });
+}
+
 const frontPageSlice = createSlice({
     name: 'frontPage',
     initialState: {
@@ -33,25 +53,13 @@ const frontPageSlice = createSlice({
         },
         updateFrontPageItemsFromBookmark: (state, action) => {
             let bookmark = action.payload;
-            let nextItems = state.items.map( item => {
-                if(item.discussionId === bookmark.discussionId) {
-                    return { ...item, lastPostReadCount: bookmark.lastPostCount, lastPostReadDate: bookmark.lastPostRead, lastPostReadId: bookmark.lastPostId }
-                } else {
-                    return item;
-                }
-            });
-            state.items = [...nextItems];
+            state.items = [...getNextFrontPageItemsFromBookmark(bookmark, state.items)];
+            state.frontpageSubscriptions = [...getNextFrontPageItemsFromBookmark(bookmark, state.frontpageSubscriptions)];
         },
         updateFrontPageItemsFromPost: (state, action) => {
             let post = action.payload;
-            let nextItems = state.items.map( item => {
-                if(item.discussionId === post.discussionId && post.postNum > item.postCount) {
-                    return { ...item, postCount: post.postNum }
-                } else {
-                    return item;
-                }
-            });
-            state.items = [...nextItems];
+            state.items = [...getNextFrontPageItemsFromPost(post, state.items)];
+            state.frontpageSubscriptions = [...getNextFrontPageItemsFromPost(post, state.frontpageSubscriptions)];
         },
         clearFrontPageItems: (state) => {
             state.items = [];
