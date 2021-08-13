@@ -11,7 +11,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 .addPost {
     margin-top: 10px;
-    padding: 10px;
+    padding-top: 10px;
     border-top: 1px solid rgba(0, 0, 0, 0.12);
     border-left: none;
     border-right: none;
@@ -28,7 +28,7 @@
         justify-content: space-between;
         .postButtonContainer {
             display: flex;
-            flex-direction: row;
+            flex-direction: row-reverse;
         }
     }
 }
