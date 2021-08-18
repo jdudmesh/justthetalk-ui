@@ -53,6 +53,21 @@ const discussionSlice = createSlice({
             state.actionState = LoadingState.Pending;
             state.actionError = "";
         },
+        updateDiscussionItemsFromFrontPageEntry: (state, action) => {
+            let entry = action.payload;
+            let nextItems = state.items.map( item => {
+                if(item.discussionId === entry.discussionId && entry.postCount > item.postCount) {
+                    return { ...item,
+                        postCount: entry.postCount,
+                        lastPostDate: entry.lastPostDate,
+                        lastPostId: entry.lastPostId,
+                    }
+                } else {
+                    return item;
+                }
+            });
+            state.items = [...nextItems];
+        },
         updateDiscussionItemsFromPost: (state, action) => {
             let post = action.payload;
             let nextItems = state.items.map( item => {
@@ -72,7 +87,17 @@ const discussionSlice = createSlice({
     },
 });
 
-export const { appendDiscussions, clearDiscussions, clearCreatedDiscussion, setDiscussionLoadingState, setDiscussionActionState, setDiscussionActionError, clearDiscussionActionState, updateDiscussionItemsFromPost } = discussionSlice.actions
+export const {
+    appendDiscussions,
+    clearDiscussions,
+    clearCreatedDiscussion,
+    setDiscussionLoadingState,
+    setDiscussionActionState,
+    setDiscussionActionError,
+    clearDiscussionActionState,
+    updateDiscussionItemsFromPost,
+    updateDiscussionItemsFromFrontPageEntry,
+} = discussionSlice.actions
 
 export const selectDiscussionLoadingState = state => state.discussion.loadingState;
 export const selectDiscussionActionState = state => state.discussion.actionState;

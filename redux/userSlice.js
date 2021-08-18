@@ -36,8 +36,8 @@ const userSlice = createSlice({
         currentFolderNewMessages: 0,
         currentBookmark: null,
 
-        messageQueue: [],
-        mergeQueuedMessages: false,
+        pendingDiscussionUpdate: null,
+        mergePendingPosts: false,
 
         otherUserCache: {},
 
@@ -79,14 +79,14 @@ const userSlice = createSlice({
         setCurrentFolder: (state, action) => {
             state.currentFolder = action.payload;
             state.currentDiscussion = null;
-            state.messageQueue = [];
-            state.mergeQueuedMessages = false;
+            state.pendingDiscussionUpdate = null;
+            state.mergePendingPosts = false;
             state.currentFolderNewMessages = 0;
         },
         setCurrentDiscussion: (state, action) => {
             state.currentDiscussion = action.payload;
-            state.messageQueue = [];
-            state.mergeQueuedMessages = false;
+            state.pendingDiscussionUpdate = null;
+            state.mergePendingPosts = false;
             state.currentBookmark =  null;
         },
         mergeCurrentFolder: (state, action) => {
@@ -94,6 +94,23 @@ const userSlice = createSlice({
         },
         mergeCurrentDiscussion: (state, action) => {
             state.currentDiscussion = { ...state.currentDiscussion, ...action.payload };
+        },
+        setPendingDiscussionUpdate: (state, action) => {
+            state.pendingDiscussionUpdate = action.payload;
+        },
+        setMergePendingPosts: (state, action) => {
+            console.debug("setMergePendingPosts", action.payload);
+            state.mergePendingPosts = action.payload;
+            if(state.mergePendingPosts && state.pendingDiscussionUpdate) {
+                console.debug("merging pending posts");
+                state.currentDiscussion = {
+                    ...state.currentDiscussion,
+                    lastPostDate: state.pendingDiscussionUpdate.lastPostDate,
+                    lastPostId: state.pendingDiscussionUpdate.lastPostId,
+                    postCount: state.pendingDiscussionUpdate.postCount
+                }
+                state.pendingDiscussionUpdate = null;
+            }
         },
         updateCurrentDiscussionFromLastPost: (state, action) => {
             state.currentDiscussion = { ...state.currentDiscussion, postCount: action.payload.postNum, lastPostId: action.payload.id, lastPostDate: action.payload.createdDate };
@@ -115,15 +132,6 @@ const userSlice = createSlice({
         setFolderSubscriptionExceptions:  (state, action) => {
             state.folderSubscriptionExceptions = action.payload;
         },
-        enqueueMessage: (state, action) => {
-            state.messageQueue = [...state.messageQueue, action.payload];
-        },
-        clearQueuedMessages: (state, action) => {
-            state.messageQueue = [];
-        },
-        setMergeQueuedMessages: (state, action) => {
-            state.mergeQueuedMessages = action.payload;
-        },
         setOtherUser:  (state, action) => {
             let user = {};
             user[action.payload.userId] = action.payload;
@@ -132,6 +140,19 @@ const userSlice = createSlice({
         setCurrentBookmark: (state, action) => {
             state.currentBookmark = action.payload;
         },
+        updateUserStateFromFrontPageEntry: (state, action) => {
+            let entry = action.payload;
+            if(state.currentDiscussion && state.currentDiscussion.id === entry.discussionId) {
+                let discussionUpdate = {...state.currentDiscussion, lastPostDate: entry.lastPostDate, lastPostId: entry.lastPostId, postCount: entry.postCount}
+                if(state.mergePendingPosts) {
+                    console.debug("updating current discussion");
+                    state.currentDiscussion = discussionUpdate;
+                } else {
+                    console.debug("updating pending discussion");
+                    state.pendingDiscussionUpdate = discussionUpdate;
+                }
+            }
+        }
     },
 });
 
@@ -154,12 +175,12 @@ export const {
     setDiscussionSubscriptions,
     setFolderSubscriptions,
     setFolderSubscriptionExceptions,
-    enqueueMessage,
-    setMergeQueuedMessages,
-    clearQueuedMessages,
+    setPendingDiscussionUpdate,
+    setMergePendingPosts,
     setOtherUser,
     updateCurrentDiscussionFromLastPost,
     setCurrentBookmark,
+    updateUserStateFromFrontPageEntry,
 } = userSlice.actions;
 
 export const selectUserLoadingState = state => state.user.loadingState;
@@ -169,11 +190,9 @@ export const selectUserActionError = state => state.user.actionError;
 export const selectUser = state => state.user.user;
 export const selectUserViewType = state => state.user.user ? state.user.user.viewType : "latest";
 
-export const selectQueuedMessages = state => state.user.messageQueue;
-export const selectMergeQueuedMessages = state => state.user.mergeQueuedMessages;
-
 export const selectCurrentFolder = state => state.user.currentFolder;
 export const selectCurrentDiscussion = state => state.user.currentDiscussion;
+export const selectPendingDiscussionUpdate = state => state.user.pendingDiscussionUpdate;
 export const selectCurrentFolderNewMessages = state => state.user.currentFolderNewMessages;
 
 export const selectDiscussionSubscriptions = state => state.user.discussionSubscriptions;

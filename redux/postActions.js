@@ -18,7 +18,7 @@ import { toast } from "react-toastify";
 import { LoadingState } from "./constants";
 
 import { fetchPostsAPI, createPostAPI, editPostAPI, deletePostAPI } from "../api";
-import { mergeCurrentDiscussion, clearQueuedMessages, setMergeQueuedMessages } from "./userSlice";
+import { mergeCurrentDiscussion, setPendingDiscussionUpdate, setMergePendingPosts } from "./userSlice";
 import { mergePosts, setPostActionError, setPostLoadingState, setPostActionState } from "./postSlice";
 import { updateDiscussionItemsFromPost } from "./discussionSlice";
 import { updateFrontPageItemsFromPost } from "./frontPageSlice";
@@ -26,8 +26,6 @@ import { updateFrontPageItemsFromPost } from "./frontPageSlice";
 export const fetchPosts = (discussion, postNum, customPageSize) => (dispatch, getState) => {
 
     dispatch(setPostLoadingState(LoadingState.Loading));
-    dispatch(clearQueuedMessages());
-    dispatch(setMergeQueuedMessages(false));
 
     let state = getState();
     let pageSize = customPageSize ? customPageSize : state.post.pageSize;

@@ -63,15 +63,13 @@ import {
     incrementCurrentFolderNewMessages,
     mergeCurrentFolder,
     mergeCurrentDiscussion,
-    enqueueMessage,
-    clearQueuedMessages,
-    setMergeQueuedMessages,
     setDiscussionSubscriptions,
     setFolderSubscriptions,
     setFolderSubscriptionExceptions,
     setOtherUser,
     updateCurrentDiscussionFromLastPost,
     setCurrentBookmark,
+    updateUserStateFromFrontPageEntry,
 } from "./userSlice";
 
 import {
@@ -84,13 +82,17 @@ import {
 } from "./postSlice"
 
 import {
+    fetchPosts,
+} from "./postActions";
+
+import {
     fetchFolders
 } from "./folderActions";
 
 import {
     clearFrontPageItems,
     updateFrontPageItemsFromBookmark,
-    updateFrontPageItemsFromPost,
+    mergeFrontPageEntry,
 } from "./frontPageSlice";
 
 import {
@@ -103,7 +105,7 @@ import {
 } from "./adminSlice";
 
 import {
-    updateDiscussionItemsFromPost
+    updateDiscussionItemsFromFrontPageEntry
 } from "./discussionSlice";
 
 import { LoadingState } from './constants';
@@ -114,48 +116,16 @@ export const createWebsocket = () => (dispatch, getState) => {
 
         let state = getState();
 
-        let post = JSON.parse(message);
-
-        if(state.user.currentDiscussion && post.discussionId === state.user.currentDiscussion.id) {
-
-            if(post.createdByUserId !== state.user.user.id) {
-                if(state.user.mergeQueuedMessages) {
-                    dispatch(updateCurrentDiscussionFromLastPost(post));
-                    dispatch(mergePosts([post]));
-                    dispatch(setCurrentDiscussionBookmark(post));
-                } else {
-                    dispatch(enqueueMessage(post));
-                }
-            }
-
-        } else if(state.user.currentFolder && post.url.startsWith(`/${state.user.currentFolder.key}`)) {
-            dispatch(incrementCurrentFolderNewMessages());
-        }
-
-        dispatch(updateFrontPageItemsFromPost(post));
-        dispatch(updateDiscussionItemsFromPost(post));
-
-        const exists = state.frontPage.frontpageSubscriptions.some(x => x.discussionId == post.discussionId);
-        if(exists) {
-            dispatch(mergeFrontpageSubscriptionUpdate(post));
-        } else {
-            dispatch(fetchFrontPageSubscriptions());
-        }
+        let frontPageEntry = JSON.parse(message);
+        console.log(frontPageEntry);
+        dispatch(updateUserStateFromFrontPageEntry(frontPageEntry));
+        dispatch(mergeFrontPageEntry(frontPageEntry));
+        dispatch(updateDiscussionItemsFromFrontPageEntry(frontPageEntry));
 
     }
 
     openWebsocketAPI(eventListener);
 
-}
-
-export const startMergingNewMessages = () => (dispatch, getState) => {
-    let state = getState();
-    if(state.user.messageQueue.length > 0) {
-        dispatch(updateCurrentDiscussionFromLastPost(state.user.messageQueue[state.user.messageQueue.length - 1]));
-    }
-    dispatch(mergePosts(state.user.messageQueue));
-    dispatch(clearQueuedMessages());
-    dispatch(setMergeQueuedMessages(true));
 }
 
 const handleUserDetailsSuccess = (dispatch) => (user) => {

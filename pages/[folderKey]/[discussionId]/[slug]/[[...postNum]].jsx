@@ -48,15 +48,14 @@ import { htmlDecode } from "../../../../lib/utils";
 import { selectUser,
     selectCurrentFolder,
     selectCurrentDiscussion,
-    selectQueuedMessages,
-    selectMergeQueuedMessages,
+    selectPendingDiscussionUpdate,
+    setMergePendingPosts,
 } from "../../../../redux/userSlice";
 
 import {
     setUserLocation,
     setDiscussionSubscriptionStatus,
     setDiscussionUnread,
-    startMergingNewMessages,
     setCurrentDiscussionBookmark,
 } from "../../../../redux/userActions";
 
@@ -113,7 +112,6 @@ export default function DiscussionView(props) {
     const [openDeleteDiscussionDialog, setOpenDeleteDiscussionDialog] = useState(false);
     const [openMoveDiscussionDialog, setOpenMoveDiscussionDialog] = useState(false);
     const [isEditingPost, setIsEditingPost] = useState(false);
-    const [moderationResult, setModerationResult] = useState(null);
     const [debounceTime, setDebounceTime] = useState(0);
 
     const [reportedPost, setReportedPost] = useState(null);
@@ -125,12 +123,10 @@ export default function DiscussionView(props) {
     const currentUser = useSelector(selectUser);
     const currentFolder = useSelector(selectCurrentFolder);
     const currentDiscussion = useSelector(selectCurrentDiscussion);
+    const pendingDicussionUpdateAvailable = useSelector(selectPendingDiscussionUpdate);
     const blockedUsers = useSelector(selectBlockedUsers);
     const pageSize = useSelector(selectPostsPageSize);
     const posts = useSelector(selectPosts);
-
-    const queuedPosts = useSelector(selectQueuedMessages);
-    const mergeQueuedPosts = useSelector(selectMergeQueuedMessages);
 
     const containerRef = useRef();
     const pagingContainerRef = useRef();
@@ -386,7 +382,7 @@ export default function DiscussionView(props) {
     }
 
     const onSetClickToViewNewPosts = () => {
-        dispatch(startMergingNewMessages());
+        dispatch(setMergePendingPosts(true));
     }
 
     const onClickAdminMenu = (key) => {
@@ -505,7 +501,7 @@ export default function DiscussionView(props) {
     const renderDiscussion = () => {
 
         let showAddPosts = !editDiscussion && (currentDiscussion.postCount == 0 || (posts.length > 0 && posts[posts.length - 1].postNum >= currentDiscussion.postCount))
-        let showNewPostsAvailable = !mergeQueuedPosts && queuedPosts.length > 0 && showAddPosts;
+        let showNewPostsAvailable = pendingDicussionUpdateAvailable && (pendingDicussionUpdateAvailable.postCount - currentDiscussion.postCount > 0) && showAddPosts;
 
         return <Paper variant="outlined" className="discussionList">
 
@@ -537,7 +533,7 @@ export default function DiscussionView(props) {
                 }
 
                 { showNewPostsAvailable
-                    ? <Alert severity="info" className={styles.userAlert} action={<Button color="primary" size="small" onClick={onSetClickToViewNewPosts}>Click to view</Button>}>{`${queuedPosts.length} new posts available`}</Alert>
+                    ? <Alert severity="info" className={styles.userAlert} action={<Button color="primary" size="small" onClick={onSetClickToViewNewPosts}>Click to view</Button>}>{`${pendingDicussionUpdateAvailable.postCount - currentDiscussion.postCount} new posts available`}</Alert>
                     : <></>
                 }
 

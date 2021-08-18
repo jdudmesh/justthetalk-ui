@@ -78,10 +78,46 @@ const frontPageSlice = createSlice({
         setFrontpageSubscriptions: (state, action) => {
             state.frontpageSubscriptions = [...action.payload];
         },
+        mergeFrontPageEntry: (state, action) => {
+
+            let entry = action.payload;
+
+            let foundSubs = false;
+            let nextSubs = state.frontpageSubscriptions.map( sub => {
+                if(sub.discussionId === entry.discussionId) {
+                    foundSubs = true
+                    return {...sub, lastPostDate: entry.lastPostDate, lastPostId: entry.lastPostId, postCount: entry.postCount };
+                } else {
+                    return sub;
+                }
+            });
+            state.frontpageSubscriptions = [...nextSubs]
+
+            let nextItems = state.items.map( item => {
+                if(item.discussionId === entry.discussionId) {
+                    foundSubs = true
+                    return {...item, lastPostDate: entry.lastPostDate, lastPostId: entry.lastPostId, postCount: entry.postCount };
+                } else {
+                    return item;
+                }
+            });
+            state.items = [...nextItems];
+        },
     },
 });
 
-export const { setFrontpageSubscriptions, mergeFrontpageSubscriptionUpdate, appendFrontPageItems, updateFrontPageItemsFromBookmark, updateFrontPageItemsFromPost, clearFrontPageItems, setFrontPageLoadingState, setFrontPageActionState, setMaxPages } = frontPageSlice.actions
+export const {
+    setFrontpageSubscriptions,
+    mergeFrontpageSubscriptionUpdate,
+    appendFrontPageItems,
+    updateFrontPageItemsFromBookmark,
+    updateFrontPageItemsFromPost,
+    clearFrontPageItems,
+    setFrontPageLoadingState,
+    setFrontPageActionState,
+    setMaxPages,
+    mergeFrontPageEntry,
+} = frontPageSlice.actions
 export const selectFrontPageLoadingState = state => state.frontPage.loadingState;
 export const selectFrontPageItems = state => state.frontPage.items;
 export const selectFrontPageMaxPages = state => state.frontPage.maxPages;

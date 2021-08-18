@@ -139,8 +139,6 @@ export const mergeFrontpageSubscriptionUpdate = (post) => (dispatch, getState) =
         }
     });
 
-    //sortFrontpageSubscription(nextSubs, state);
-
     dispatch(setFrontpageSubscriptions(nextSubs));
 
 }
