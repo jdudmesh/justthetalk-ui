@@ -44,6 +44,10 @@ export function ReportsHistory({}) {
 
     useEffect(() => {
 
+        if(!IntersectionObserver) {
+            return;
+        }
+
         let observer = new IntersectionObserver((entries) => {
             for(let i = 0; i < entries.length; i++) {
                 let entry = entries[i];
