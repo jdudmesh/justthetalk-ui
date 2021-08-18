@@ -224,6 +224,10 @@ export default function DiscussionView(props) {
             dispatch(setCurrentDiscussionBookmark(bookmarkPost));
         }
 
+        if(!IntersectionObserver) {
+            return;
+        }
+
         let observer = new IntersectionObserver((entries) => {
 
             if(posts.length === 0 || router.asPath.endsWith("#last")) {
