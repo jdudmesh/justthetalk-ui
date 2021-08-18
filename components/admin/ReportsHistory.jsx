@@ -44,7 +44,7 @@ export function ReportsHistory({}) {
 
     useEffect(() => {
 
-        if(!IntersectionObserver) {
+        if("undefined" === typeof IntersectionObserver) {
             return;
         }
 

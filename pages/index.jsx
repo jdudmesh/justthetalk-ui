@@ -104,7 +104,7 @@ export default function Home(props) {
             return;
         }
 
-        if(!IntersectionObserver) {
+        if("undefined" === typeof IntersectionObserver) {
             return;
         }
 

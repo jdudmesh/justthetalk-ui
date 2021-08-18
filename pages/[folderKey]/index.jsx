@@ -85,7 +85,7 @@ export default function FolderView(props) {
             return;
         }
 
-        if(!IntersectionObserver) {
+        if("undefined" === typeof IntersectionObserver) {
             return;
         }
 

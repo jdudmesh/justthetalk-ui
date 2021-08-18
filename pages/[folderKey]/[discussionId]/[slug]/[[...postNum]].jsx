@@ -224,7 +224,7 @@ export default function DiscussionView(props) {
             dispatch(setCurrentDiscussionBookmark(bookmarkPost));
         }
 
-        if(!IntersectionObserver) {
+        if("undefined" === typeof IntersectionObserver) {
             return;
         }
 
