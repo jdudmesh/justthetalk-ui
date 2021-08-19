@@ -28,7 +28,7 @@ import {
     setMaxPages
 } from './frontPageSlice';
 
-export const fetchFrontPage = (viewType, start) => (dispatch, getState) => {
+export const fetchFrontPage = (viewType, pageNum) => (dispatch, getState) => {
 
     let state = getState();
     if(start > state.frontPage.maxPages) {
@@ -38,6 +38,7 @@ export const fetchFrontPage = (viewType, start) => (dispatch, getState) => {
     dispatch(setFrontPageLoadingState(LoadingState.Loading));
 
     let size = state.frontPage.pageSize;
+    let start = pageNum ? pageNum * state.discussion.pageSize : 0;
 
     fetchFrontPageAPI(viewType, start, size).then((res) => {
         localStorage.setItem("reloadCount", "0");
