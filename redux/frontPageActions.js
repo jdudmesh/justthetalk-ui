@@ -21,6 +21,7 @@ import { LoadingState } from './constants';
 import { fetchFrontPageAPI } from '../api';
 
 import {
+    setFrontPageItems,
     setFrontpageSubscriptions,
     appendFrontPageItems,
     setFrontPageLoadingState,
@@ -70,7 +71,6 @@ export const fetchFrontPageSubscriptions = () => (dispatch, getState) => {
         const state = getState();
         let nextSubs = res.data.data;
         if(nextSubs) {
-            //sortFrontpageSubscription(nextSubs, state);
             dispatch(setFrontpageSubscriptions(nextSubs));
         }
     }).catch((err) => {
@@ -81,7 +81,65 @@ export const fetchFrontPageSubscriptions = () => (dispatch, getState) => {
 
 }
 
-const sortFrontpageSubscription = (nextSubs, state) => {
+export const updateFrontPageItemsFromBookmark = (bookmark) => (dispatch, getState) => {
+
+    let state = getState();
+
+    let nextItems = [...getNextFrontPageItemsFromBookmark(bookmark, state.frontPage.items)];
+    sortFrontpageItems(nextItems);
+    dispatch(setFrontPageItems(nextItems));
+
+    let nextSubs = [...getNextFrontPageItemsFromBookmark(bookmark, state.frontPage.frontpageSubscriptions)];
+    sortFrontpageSubscription(nextSubs, state);
+    dispatch(setFrontpageSubscriptions(nextSubs));
+
+}
+
+export const updateFrontPageItemsFromPost = (post) => (dispatch, getState) => {
+
+    let state = getState();
+
+    let nextItems = [...getNextFrontPageItemsFromPost(post, state.frontPage.items)];
+    sortFrontpageItems(nextItems);
+    dispatch(setFrontPageItems(nextItems));
+
+    let nextSubs = [...getNextFrontPageItemsFromPost(post, state.frontPage.frontpageSubscriptions)];
+    sortFrontpageSubscription(nextSubs, state);
+    dispatch(setFrontpageSubscriptions(nextSubs));
+
+}
+
+export const mergeFrontPageEntry = (entry) => (dispatch, getState) => {
+
+    let state = getState();
+
+    let nextItems = state.frontPage.items.map( item => {
+        if(item.discussionId === entry.discussionId) {
+            foundSubs = true
+            return {...item, lastPostDate: entry.lastPostDate, lastPostId: entry.lastPostId, postCount: entry.postCount };
+        } else {
+            return item;
+        }
+    });
+    sortFrontpageItems(nextItems);
+    dispatch(setFrontPageItems(nextItems));
+
+    let foundSubs = false;
+    let nextSubs = state.frontPage.frontpageSubscriptions.map( sub => {
+        if(sub.discussionId === entry.discussionId) {
+            foundSubs = true
+            return {...sub, lastPostDate: entry.lastPostDate, lastPostId: entry.lastPostId, postCount: entry.postCount };
+        } else {
+            return sub;
+        }
+    });
+    sortFrontpageSubscription(nextSubs, state);
+    dispatch(setFrontpageSubscriptions(nextSubs));
+
+}
+
+
+export const sortFrontpageSubscription = (nextSubs, state) => {
 
     switch(state.user.user.subscriptionFetchOrder) {
         case 0: // oldest first
@@ -127,18 +185,38 @@ const sortFrontpageSubscription = (nextSubs, state) => {
 
 }
 
-export const mergeFrontpageSubscriptionUpdate = (post) => (dispatch, getState) => {
+export const sortFrontpageItems = (nextItems) => {
 
-    const state = getState();
-
-    let nextSubs = state.frontPage.frontpageSubscriptions.map( sub => {
-        if(sub.discussionId === post.discussionId) {
-            return {...sub, lastPostDate: post.createdDate, lastPostId: post.id, postCount: post.postNum };
-        } else {
-            return sub;
+    nextItems.sort((a, b) => {
+        let d1 = new Date(a.lastPostDate).getTime();
+        let d2 = new Date(b.lastPostDate).getTime();
+        if(d1 > d2) {
+            return -1;
         }
+        if(d1 < d2) {
+            return 1;
+        }
+        return 0;
     });
 
-    dispatch(setFrontpageSubscriptions(nextSubs));
+}
 
+const getNextFrontPageItemsFromBookmark = (bookmark, currentItems) => {
+    return currentItems.map( item => {
+        if(item.discussionId === bookmark.discussionId) {
+            return { ...item, lastPostReadCount: bookmark.lastPostCount, lastPostReadDate: bookmark.lastPostRead, lastPostReadId: bookmark.lastPostId }
+        } else {
+            return item;
+        }
+    });
+}
+
+const getNextFrontPageItemsFromPost = (post, currentItems) => {
+    return currentItems.map( item => {
+        if(item.discussionId === post.discussionId && post.postNum > item.postCount) {
+            return { ...item, postCount: post.postNum, lastPostDate: post.createdDate, lastPostId: post.Id }
+        } else {
+            return item;
+        }
+    });
 }

@@ -21,7 +21,7 @@ import { fetchPostsAPI, createPostAPI, editPostAPI, deletePostAPI } from "../api
 import { mergeCurrentDiscussion, setPendingDiscussionUpdate, setMergePendingPosts } from "./userSlice";
 import { mergePosts, setPostActionError, setPostLoadingState, setPostActionState } from "./postSlice";
 import { updateDiscussionItemsFromPost } from "./discussionSlice";
-import { updateFrontPageItemsFromPost } from "./frontPageSlice";
+import { updateFrontPageItemsFromPost } from "./frontPageActions";
 
 export const fetchPosts = (discussion, postNum, customPageSize) => (dispatch, getState) => {
 

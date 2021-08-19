@@ -16,26 +16,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 import { LoadingState } from './constants';
-
-const getNextFrontPageItemsFromBookmark = (bookmark, currentItems) => {
-    return currentItems.map( item => {
-        if(item.discussionId === bookmark.discussionId) {
-            return { ...item, lastPostReadCount: bookmark.lastPostCount, lastPostReadDate: bookmark.lastPostRead, lastPostReadId: bookmark.lastPostId }
-        } else {
-            return item;
-        }
-    });
-}
-
-const getNextFrontPageItemsFromPost = (post, currentItems) => {
-    return currentItems.map( item => {
-        if(item.discussionId === post.discussionId && post.postNum > item.postCount) {
-            return { ...item, postCount: post.postNum }
-        } else {
-            return item;
-        }
-    });
-}
+import { sortFrontpageSubscription, sortFrontpageItems } from "./frontPageActions";
 
 const frontPageSlice = createSlice({
     name: 'frontPage',
@@ -48,18 +29,11 @@ const frontPageSlice = createSlice({
         maxPages: 9999,
     },
     reducers: {
+        setFrontPageItems: (state, action) => {
+            state.items = [...action.payload];
+        },
         appendFrontPageItems: (state, action) => {
             state.items = [...state.items, ...action.payload];
-        },
-        updateFrontPageItemsFromBookmark: (state, action) => {
-            let bookmark = action.payload;
-            state.items = [...getNextFrontPageItemsFromBookmark(bookmark, state.items)];
-            state.frontpageSubscriptions = [...getNextFrontPageItemsFromBookmark(bookmark, state.frontpageSubscriptions)];
-        },
-        updateFrontPageItemsFromPost: (state, action) => {
-            let post = action.payload;
-            state.items = [...getNextFrontPageItemsFromPost(post, state.items)];
-            state.frontpageSubscriptions = [...getNextFrontPageItemsFromPost(post, state.frontpageSubscriptions)];
         },
         clearFrontPageItems: (state) => {
             state.items = [];
@@ -91,7 +65,8 @@ const frontPageSlice = createSlice({
                     return sub;
                 }
             });
-            state.frontpageSubscriptions = [...nextSubs]
+            sortFrontpageSubscription(nextSubs, state);
+            state.frontpageSubscriptions = [...nextSubs];
 
             let nextItems = state.items.map( item => {
                 if(item.discussionId === entry.discussionId) {
@@ -107,17 +82,15 @@ const frontPageSlice = createSlice({
 });
 
 export const {
+    setFrontPageItems,
     setFrontpageSubscriptions,
-    mergeFrontpageSubscriptionUpdate,
     appendFrontPageItems,
-    updateFrontPageItemsFromBookmark,
-    updateFrontPageItemsFromPost,
     clearFrontPageItems,
     setFrontPageLoadingState,
     setFrontPageActionState,
     setMaxPages,
-    mergeFrontPageEntry,
 } = frontPageSlice.actions
+
 export const selectFrontPageLoadingState = state => state.frontPage.loadingState;
 export const selectFrontPageItems = state => state.frontPage.items;
 export const selectFrontPageMaxPages = state => state.frontPage.maxPages;

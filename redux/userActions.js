@@ -91,13 +91,11 @@ import {
 
 import {
     clearFrontPageItems,
-    updateFrontPageItemsFromBookmark,
-    mergeFrontPageEntry,
 } from "./frontPageSlice";
 
 import {
-    fetchFrontPageSubscriptions,
-    mergeFrontpageSubscriptionUpdate,
+    mergeFrontPageEntry,
+    updateFrontPageItemsFromBookmark,
 } from "./frontPageActions";
 
 import {
