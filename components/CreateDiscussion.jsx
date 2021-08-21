@@ -137,7 +137,7 @@ export function CreateDiscussion({folder, discussion, onEditedDiscussion, onCanc
                 : <></>
             }
             <div className={styles.postButton}>
-                <Button variant="contained" color="primary" onClick={onCreate} data-test-id="create-discussion">{discussion ? "Save" : "Create"}&#8230;</Button>
+                <Button variant="contained" color="primary" onClick={onCreate} data-test-id="create-discussion">Save&#8230;</Button>
                 <Button variant="contained" color="secondary" onClick={onCancel}>Cancel</Button>
             </div>
             { creationError.length > 0
