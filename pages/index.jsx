@@ -67,11 +67,9 @@ export default function Home(props) {
     const loadingState = useSelector(selectFrontPageLoadingState);
     const currentUser = useSelector(selectUser);
     const currentUserLoadingState = useSelector(selectUserLoadingState);
-    const maxPages = useSelector(selectFrontPageMaxPages);
     const subs = useSelector(selectFrontpageSubscriptions);
 
     const [viewTitle, setViewTitle] = useState("Latest Discussions");
-    const [pageNum, setPageNum] = useState(0);
     const [showReadSubs, setShowReadSubs] = useState(false);
 
     const isWidth800 = useMediaQuery({ query: "(min-width: 800px)" });
@@ -91,7 +89,8 @@ export default function Home(props) {
             return;
         }
 
-        dispatch(fetchFrontPage(viewType, 0));
+        dispatch(fetchFrontPage(viewType));
+
         if(currentUser) {
             dispatch(fetchFrontPageSubscriptions());
         }
@@ -111,12 +110,9 @@ export default function Home(props) {
         let observer = new IntersectionObserver((entries) => {
             for(let i = 0; i < entries.length; i++) {
                 let entry = entries[i];
-                if(entry.intersectionRatio > 0) {
-                    let nextPageNum = pageNum + 1;
-                    if(nextPageNum <= maxPages) {
-                        dispatch(fetchFrontPage(viewType, nextPageNum));
-                        setPageNum(nextPageNum);
-                    }
+                if(entry.intersectionRatio > 0 && discussions.length > 0) {
+                    let lastEntry = discussions[discussions.length - 1];
+                    dispatch(fetchFrontPage(viewType, lastEntry.lastPostDate));
                     break;
                 }
             }
@@ -151,14 +147,13 @@ export default function Home(props) {
     }, [viewType, currentUserLoadingState]);
 
     const onClickMenu = (key) => {
-        setPageNum(0);
+        dispatch(clearFrontPageItems());
         dispatch(updateUserViewType(key));
     }
 
     const onReload = () => {
-        setPageNum(0);
         dispatch(clearFrontPageItems());
-        dispatch(fetchFrontPage(viewType, 0));
+        dispatch(fetchFrontPage(viewType));
         dispatch(fetchFrontPageSubscriptions());
     }
 

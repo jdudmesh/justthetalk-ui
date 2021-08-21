@@ -28,29 +28,18 @@ import {
     setMaxPages
 } from './frontPageSlice';
 
-export const fetchFrontPage = (viewType, pageNum) => (dispatch, getState) => {
+export const fetchFrontPage = (viewType, sinceDate) => (dispatch, getState) => {
 
     let state = getState();
-    if(start > state.frontPage.maxPages) {
-        return;
-    }
 
     dispatch(setFrontPageLoadingState(LoadingState.Loading));
 
     let size = state.frontPage.pageSize;
-    let start = pageNum ? pageNum * state.discussion.pageSize : 0;
 
-    fetchFrontPageAPI(viewType, start, size).then((res) => {
+    fetchFrontPageAPI(viewType, sinceDate, size).then((res) => {
         localStorage.setItem("reloadCount", "0");
         let items = res.data.data;
-        if(items) {
-            if(items.length < size) {
-                dispatch(setMaxPages(start));
-            }
-            dispatch(appendFrontPageItems(items));
-        } else {
-            dispatch(setMaxPages(start - 1));
-        }
+        dispatch(appendFrontPageItems(items));
         dispatch(setFrontPageLoadingState(LoadingState.Loaded));
     }).catch((err) => {
         console.error(err);

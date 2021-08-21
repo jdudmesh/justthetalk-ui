@@ -156,7 +156,7 @@ export const editDiscussionAPI = (discussion, title, header) => Api.Put(`/folder
 export const deleteDiscussionAPI = (discussion) => Api.Delete(`/folder/${discussion.folderId}/discussion/${discussion.id}`);
 
 
-export const fetchFrontPageAPI = (viewType, start, size) => Api.Get(`/frontpage/${viewType}?start=${start}&size=${size}`);
+export const fetchFrontPageAPI = (viewType, sinceDate, size) => Api.Get(`/frontpage/${viewType}?since=${sinceDate}&size=${size}`);
 
 export const fetchUserHistoryAPI = (userId) => Api.Get(`/admin/user/${userId}/history`);
 export const toggleUserStatusAPI = (field, user) => Api.Put(`/admin/user/${user.id}/status`, { [field] : !user[field] });
