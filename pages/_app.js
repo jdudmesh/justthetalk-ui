@@ -21,9 +21,9 @@ import { LoadingState } from "../redux/constants";
 import "react-toastify/dist/ReactToastify.css";
 import "../styles/globals.scss";
 
-import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import { createTheme, ThemeProvider } from "@material-ui/core/styles";
 
-const localTheme = createMuiTheme({
+const localTheme = createTheme({
     palette: {
         primary: {
             main: "#2A5880",
