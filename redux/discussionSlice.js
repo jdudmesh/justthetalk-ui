@@ -22,6 +22,7 @@ const discussionSlice = createSlice({
     initialState: {
         loadingState: LoadingState.Pending,
         actionState: LoadingState.Pending,
+        lastLoadCount: 0,
         items: [],
         actionError: "",
         createdDiscussion: null,
@@ -52,6 +53,9 @@ const discussionSlice = createSlice({
         clearDiscussionActionState: (state) => {
             state.actionState = LoadingState.Pending;
             state.actionError = "";
+        },
+        setLastLoadCount: (state, action) => {
+            state.lastLoadCount = action.payload;
         },
         updateDiscussionItemsFromFrontPageEntry: (state, action) => {
             let entry = action.payload;
@@ -95,6 +99,7 @@ export const {
     setDiscussionActionState,
     setDiscussionActionError,
     clearDiscussionActionState,
+    setLastLoadCount,
     updateDiscussionItemsFromPost,
     updateDiscussionItemsFromFrontPageEntry,
 } = discussionSlice.actions
@@ -102,8 +107,7 @@ export const {
 export const selectDiscussionLoadingState = state => state.discussion.loadingState;
 export const selectDiscussionActionState = state => state.discussion.actionState;
 export const selectDiscussions = state => state.discussion.items;
-export const selectDiscussionPageStart = state => state.discussion.pageStart;
-export const selectDiscussionPageSize = state => state.discussion.pageSize;
+export const selectLastLoadCount = state => state.discussion.lastLoadCount;
 
 export const selectCreatedDiscussion = state => state.discussion.createdDiscussion;
 export const selectDiscussionActionError = state => state.discussion.actionError;

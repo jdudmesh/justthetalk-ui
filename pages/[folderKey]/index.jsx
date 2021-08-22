@@ -31,9 +31,9 @@ import PulseLoader from 'react-spinners/PulseLoader';
 import { useMediaQuery } from "react-responsive";
 
 import { selectFolders } from '../../redux/folderSlice'
-import { selectDiscussions, selectDiscussionLoadingState, clearDiscussions } from '../../redux/discussionSlice'
+import { selectDiscussions, selectDiscussionLoadingState, clearDiscussions, selectLastLoadCount } from '../../redux/discussionSlice'
 import { fetchDiscussions } from '../../redux/discussionActions'
-import { selectUser, selectCurrentFolder, selectCurrentFolderNewMessages } from '../../redux/userSlice'
+import { selectUser, selectCurrentFolder } from '../../redux/userSlice'
 import { setUserLocation, setFolderSubscriptionStatus } from '../../redux/userActions'
 
 import { LoadingState } from '../../redux/constants';
@@ -55,13 +55,12 @@ export default function FolderView(props) {
 
     const currentUser = useSelector(selectUser);
     const currentFolder = useSelector(selectCurrentFolder);
-    const currentFolderNewMessages = useSelector(selectCurrentFolderNewMessages);
 
     const folders = useSelector(selectFolders);
     const discussions = useSelector(selectDiscussions);
     const loadingState = useSelector(selectDiscussionLoadingState);
+    const lastLoadCount = useSelector(selectLastLoadCount);
 
-    const [pageNum, setPageNum] = useState(0);
     const [isCreatingDiscussion, setIsCreatingDiscussion] = useState(false);
 
     const isWidth800 = useMediaQuery({ query: "(min-width: 800px)" });
@@ -69,13 +68,12 @@ export default function FolderView(props) {
     useEffect(() => {
         if(folders.length > 0 && folderKey) {
             dispatch(setUserLocation(folderKey));
-            setPageNum(0);
         }
     }, [folders, folderKey]);
 
     useEffect(() => {
         if(currentFolder && currentFolder.key === folderKey) {
-            dispatch(fetchDiscussions(currentFolder, pageNum));
+            dispatch(fetchDiscussions(currentFolder));
         }
     }, [currentFolder]);
 
@@ -93,10 +91,9 @@ export default function FolderView(props) {
             for(let i = 0; i < entries.length; i++) {
                 let entry = entries[i];
                 if(entry.intersectionRatio > 0) {
-                    if(loadingState === LoadingState.Loaded) {
-                        let nextPageNum = pageNum + 1;
-                        dispatch(fetchDiscussions(currentFolder, nextPageNum));
-                        setPageNum(nextPageNum);
+                    if(loadingState === LoadingState.Loaded && discussions.length > 0 && lastLoadCount > 0) {
+                        let lastEntry = discussions[discussions.length - 1];
+                        dispatch(fetchDiscussions(currentFolder, lastEntry.lastPostDate));
                     }
                     break;
                 }
@@ -128,7 +125,6 @@ export default function FolderView(props) {
 
     const onReload = () => {
         if(currentFolder) {
-            setPageNum(0);
             dispatch(clearDiscussions());
             dispatch(fetchDiscussions(currentFolder));
         }
@@ -194,11 +190,6 @@ export default function FolderView(props) {
 
             { isCreatingDiscussion
                 ? <CreateDiscussion folder={currentFolder} onCancelCreateDiscussion={onCancelCreateDiscussion}></CreateDiscussion>
-                : <></>
-            }
-
-            { currentFolderNewMessages > 0
-                ? <Alert severity="info" className={styles.userAlert} action={<Button color="primary" size="small" onClick={onReload}>Click to refresh</Button>}>{`${currentFolderNewMessages} new posts available`}</Alert>
                 : <></>
             }
 

@@ -150,13 +150,16 @@ export const deletePostAPI = (discussion, post) => Api.Delete(`/folder/${discuss
 export const fetchFoldersAPI = () => Api.Get(`/folder`);
 
 export const fetchDiscussionsAPI = (folder, start, size) => Api.Get(`/folder/${folder.id}/discussion?start=${start}&size=${size}`);
+export const fetchDiscussionsBeforeAPI = (folder, beforeDate, size) => Api.Get(`/folder/${folder.id}/discussion/before?dt=${encodeURIComponent(beforeDate)}&size=${size}`);
+
 export const fetchDiscussionAPI = (folder, discussionId) => Api.Get(`/folder/${folder.id}/discussion/${discussionId}`);
 export const createDiscussionAPI = (folder, title, header, isSubscribed) => Api.Post(`/folder/${folder.id}/discussion`, { title, header, isSubscribed });
 export const editDiscussionAPI = (discussion, title, header) => Api.Put(`/folder/${discussion.folderId}/discussion/${discussion.id}`, { title, header });
 export const deleteDiscussionAPI = (discussion) => Api.Delete(`/folder/${discussion.folderId}/discussion/${discussion.id}`);
 
-
-export const fetchFrontPageAPI = (viewType, sinceDate, size) => Api.Get(`/frontpage/${viewType}?since=${sinceDate}&size=${size}`);
+export const fetchFrontPageAPI = (viewType, start, size) => Api.Get(`/frontpage/${viewType}?start=${start}&size=${size}`);
+export const fetchFrontPageSinceAPI = (viewType, sinceDate, size) => Api.Get(`/frontpage/${viewType}/since?dt=${encodeURIComponent(sinceDate)}&size=${size}`);
+export const fetchFrontPageBeforeAPI = (viewType, beforeDate, size) => Api.Get(`/frontpage/${viewType}/before?dt=${encodeURIComponent(beforeDate)}&size=${size}`);
 
 export const fetchUserHistoryAPI = (userId) => Api.Get(`/admin/user/${userId}/history`);
 export const toggleUserStatusAPI = (field, user) => Api.Put(`/admin/user/${user.id}/status`, { [field] : !user[field] });

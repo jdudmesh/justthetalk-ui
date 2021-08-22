@@ -60,14 +60,12 @@ import {
     mergeUser,
     setCurrentFolder,
     setCurrentDiscussion,
-    incrementCurrentFolderNewMessages,
     mergeCurrentFolder,
     mergeCurrentDiscussion,
     setDiscussionSubscriptions,
     setFolderSubscriptions,
     setFolderSubscriptionExceptions,
     setOtherUser,
-    updateCurrentDiscussionFromLastPost,
     setCurrentBookmark,
     updateUserStateFromFrontPageEntry,
 } from "./userSlice";
@@ -94,7 +92,7 @@ import {
 } from "./frontPageSlice";
 
 import {
-    mergeFrontPageEntry,
+    updateFrontPageFromFrontPageEntry,
     updateFrontPageItemsFromBookmark,
 } from "./frontPageActions";
 
@@ -115,9 +113,9 @@ export const createWebsocket = () => (dispatch, getState) => {
         let state = getState();
 
         let frontPageEntry = JSON.parse(message);
-        console.log(frontPageEntry);
+
         dispatch(updateUserStateFromFrontPageEntry(frontPageEntry));
-        dispatch(mergeFrontPageEntry(frontPageEntry));
+        dispatch(updateFrontPageFromFrontPageEntry(frontPageEntry));
         dispatch(updateDiscussionItemsFromFrontPageEntry(frontPageEntry));
 
     }

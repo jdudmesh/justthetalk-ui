@@ -23,17 +23,13 @@ const frontPageSlice = createSlice({
     initialState: {
         loadingState: LoadingState.Pending,
         actionState: LoadingState.Pending,
+        lastLoadCount: 0,
         items: [],
         frontpageSubscriptions: [],
-        pageSize: 50,
-        maxPages: 9999,
     },
     reducers: {
         setFrontPageItems: (state, action) => {
             state.items = [...action.payload];
-        },
-        appendFrontPageItems: (state, action) => {
-            state.items = [...state.items, ...action.payload];
         },
         clearFrontPageItems: (state) => {
             state.items = [];
@@ -46,37 +42,37 @@ const frontPageSlice = createSlice({
         setFrontPageActionState: (state, action) => {
             state.actionState = action.payload;
         },
-        setMaxPages: (state, action) => {
-            state.maxPages = action.payload;
+        setLastLoadCount: (state, action) => {
+            state.lastLoadCount = action.payload;
         },
         setFrontpageSubscriptions: (state, action) => {
             state.frontpageSubscriptions = [...action.payload];
         },
-        mergeFrontPageEntry: (state, action) => {
+        appendFrontPageItems: (state, action) => {
 
-            let entry = action.payload;
+            let newItems = action.payload;
+            if(!newItems.length) {
+                return
+            }
 
-            let foundSubs = false;
-            let nextSubs = state.frontpageSubscriptions.map( sub => {
-                if(sub.discussionId === entry.discussionId) {
-                    foundSubs = true
-                    return {...sub, lastPostDate: entry.lastPostDate, lastPostId: entry.lastPostId, postCount: entry.postCount };
-                } else {
-                    return sub;
-                }
-            });
-            sortFrontpageSubscription(nextSubs, state);
-            state.frontpageSubscriptions = [...nextSubs];
+            let newItemMap = new Map();
+            newItems.forEach(entry => newItemMap.set(entry.discussionId));
+            let nextItems = state.items.filter(x => !newItemMap.has(x.discussionId));
+            state.items = [...nextItems, ...newItems];
 
-            let nextItems = state.items.map( item => {
-                if(item.discussionId === entry.discussionId) {
-                    foundSubs = true
-                    return {...item, lastPostDate: entry.lastPostDate, lastPostId: entry.lastPostId, postCount: entry.postCount };
-                } else {
-                    return item;
-                }
-            });
-            state.items = [...nextItems];
+        },
+        prependFrontPageItems: (state, action) => {
+
+            let newItems = action.payload;
+            if(!newItems.length) {
+                return
+            }
+
+            let newItemMap = new Map();
+            newItems.forEach(entry => newItemMap.set(entry.discussionId));
+            let nextItems = state.items.filter(x => !newItemMap.has(x.discussionId));
+            state.items = [...newItems, ...nextItems];
+
         },
     },
 });
@@ -85,15 +81,17 @@ export const {
     setFrontPageItems,
     setFrontpageSubscriptions,
     appendFrontPageItems,
+    prependFrontPageItems,
     clearFrontPageItems,
     setFrontPageLoadingState,
     setFrontPageActionState,
-    setMaxPages,
+    setLastLoadCount,
 } = frontPageSlice.actions
 
 export const selectFrontPageLoadingState = state => state.frontPage.loadingState;
 export const selectFrontPageItems = state => state.frontPage.items;
 export const selectFrontPageMaxPages = state => state.frontPage.maxPages;
 export const selectFrontpageSubscriptions = state => state.frontPage.frontpageSubscriptions;
+export const selectLastLoadCount = state => state.frontPage.lastLoadCount;
 
 export default frontPageSlice.reducer

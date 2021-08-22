@@ -47,8 +47,8 @@ import { toast } from "react-toastify";
 
 import styles from '../styles/Home.module.scss'
 
-import { selectFrontPageLoadingState, selectFrontPageItems, clearFrontPageItems, selectFrontPageMaxPages, selectFrontpageSubscriptions } from '../redux/frontPageSlice'
-import { fetchFrontPage, fetchFrontPageSubscriptions } from '../redux/frontPageActions'
+import { selectFrontPageLoadingState, selectFrontPageItems, clearFrontPageItems, selectFrontPageMaxPages, selectFrontpageSubscriptions, selectLastLoadCount } from '../redux/frontPageSlice'
+import { fetchFrontPage, fetchFrontPageSince, fetchFrontPageSubscriptions } from '../redux/frontPageActions'
 import { selectFolders } from '../redux/folderSlice'
 
 import { selectUser, selectUserViewType, selectUserLoadingState } from '../redux/userSlice'
@@ -68,6 +68,7 @@ export default function Home(props) {
     const currentUser = useSelector(selectUser);
     const currentUserLoadingState = useSelector(selectUserLoadingState);
     const subs = useSelector(selectFrontpageSubscriptions);
+    const lastLoadCount = useSelector(selectLastLoadCount);
 
     const [viewTitle, setViewTitle] = useState("Latest Discussions");
     const [showReadSubs, setShowReadSubs] = useState(false);
@@ -110,7 +111,7 @@ export default function Home(props) {
         let observer = new IntersectionObserver((entries) => {
             for(let i = 0; i < entries.length; i++) {
                 let entry = entries[i];
-                if(entry.intersectionRatio > 0 && discussions.length > 0) {
+                if(entry.intersectionRatio > 0 && discussions.length > 0 && lastLoadCount > 0) {
                     let lastEntry = discussions[discussions.length - 1];
                     dispatch(fetchFrontPage(viewType, lastEntry.lastPostDate));
                     break;
@@ -152,8 +153,11 @@ export default function Home(props) {
     }
 
     const onReload = () => {
-        dispatch(clearFrontPageItems());
-        dispatch(fetchFrontPage(viewType));
+        let dateSince = new Date().toISOString();
+        if(discussions.length > 0) {
+            dateSince = discussions[0].lastPostDate;
+        }
+        dispatch(fetchFrontPageSince(viewType, dateSince));
         dispatch(fetchFrontPageSubscriptions());
     }
 

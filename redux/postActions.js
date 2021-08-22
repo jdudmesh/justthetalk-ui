@@ -67,6 +67,7 @@ export const createPost = (discussion, text, postAsAdmin, subscribeToDiscussion)
                 dispatch(mergePosts(posts));
                 dispatch(setPostActionError(""));
                 dispatch(setPostActionState(LoadingState.Loaded));
+
                 dispatch(updateFrontPageItemsFromPost(lastPost));
                 dispatch(updateDiscussionItemsFromPost(lastPost));
 

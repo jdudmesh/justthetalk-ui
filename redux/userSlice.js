@@ -33,7 +33,6 @@ const userSlice = createSlice({
 
         currentFolder: null,
         currentDiscussion: null,
-        currentFolderNewMessages: 0,
         currentBookmark: null,
 
         pendingDiscussionUpdate: null,
@@ -81,7 +80,6 @@ const userSlice = createSlice({
             state.currentDiscussion = null;
             state.pendingDiscussionUpdate = null;
             state.mergePendingPosts = false;
-            state.currentFolderNewMessages = 0;
         },
         setCurrentDiscussion: (state, action) => {
             state.currentDiscussion = action.payload;
@@ -115,14 +113,6 @@ const userSlice = createSlice({
         updateCurrentDiscussionFromLastPost: (state, action) => {
             state.currentDiscussion = { ...state.currentDiscussion, postCount: action.payload.postNum, lastPostId: action.payload.id, lastPostDate: action.payload.createdDate };
         },
-
-        incrementCurrentFolderNewMessages: (state, action) => {
-            state.currentFolderNewMessages = state.currentFolderNewMessages + 1;
-        },
-        clearCurrentFolderNewMessages: (state, action) => {
-            state.currentFolderNewMessages = 0;
-        },
-
         setDiscussionSubscriptions: (state, action) => {
             state.discussionSubscriptions = action.payload;
         },
@@ -168,8 +158,6 @@ export const {
     setAutoSubscribe,
     setCurrentFolder,
     setCurrentDiscussion,
-    incrementCurrentFolderNewMessages,
-    clearCurrentFolderNewMessages,
     mergeCurrentFolder,
     mergeCurrentDiscussion,
     setDiscussionSubscriptions,
@@ -193,7 +181,6 @@ export const selectUserViewType = state => state.user.user ? state.user.user.vie
 export const selectCurrentFolder = state => state.user.currentFolder;
 export const selectCurrentDiscussion = state => state.user.currentDiscussion;
 export const selectPendingDiscussionUpdate = state => state.user.pendingDiscussionUpdate;
-export const selectCurrentFolderNewMessages = state => state.user.currentFolderNewMessages;
 
 export const selectDiscussionSubscriptions = state => state.user.discussionSubscriptions;
 export const selectFolderSubscriptions = state => state.user.folderSubscriptions;

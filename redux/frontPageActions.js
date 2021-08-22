@@ -18,28 +18,59 @@ import { toast } from 'react-toastify';
 
 import { LoadingState } from './constants';
 
-import { fetchFrontPageAPI } from '../api';
+import { fetchFrontPageAPI, fetchFrontPageBeforeAPI, fetchFrontPageSinceAPI } from '../api';
 
 import {
     setFrontPageItems,
     setFrontpageSubscriptions,
     appendFrontPageItems,
+    prependFrontPageItems,
     setFrontPageLoadingState,
-    setMaxPages
+    setLastLoadCount,
 } from './frontPageSlice';
 
-export const fetchFrontPage = (viewType, sinceDate) => (dispatch, getState) => {
+export const fetchFrontPage = (viewType, beforeDate) => (dispatch, getState) => {
 
     let state = getState();
 
     dispatch(setFrontPageLoadingState(LoadingState.Loading));
 
-    let size = state.frontPage.pageSize;
+    beforeDate = beforeDate || new Date().toISOString();
+    const size = 50;
 
-    fetchFrontPageAPI(viewType, sinceDate, size).then((res) => {
+    fetchFrontPageBeforeAPI(viewType, beforeDate, size).then((res) => {
         localStorage.setItem("reloadCount", "0");
         let items = res.data.data;
+        dispatch(setLastLoadCount(items.length));
         dispatch(appendFrontPageItems(items));
+        dispatch(setFrontPageLoadingState(LoadingState.Loaded));
+    }).catch((err) => {
+        console.error(err);
+        let reloadCount = parseInt(localStorage.getItem("reloadCount") || 0);
+        if(reloadCount === 0) {
+            localStorage.setItem("reloadCount", (reloadCount + 1).toString());
+            window.location.reload()
+        } else {
+            toast.error("Failed to fetch front page");
+            dispatch(setFrontPageLoadingState(LoadingState.Failed));
+        }
+    });
+
+}
+
+export const fetchFrontPageSince = (viewType, sinceDate) => (dispatch, getState) => {
+
+    let state = getState();
+
+    dispatch(setFrontPageLoadingState(LoadingState.Loading));
+
+    sinceDate = sinceDate || new Date().toISOString();
+    const size = 50;
+
+    fetchFrontPageSinceAPI(viewType, sinceDate, size).then((res) => {
+        localStorage.setItem("reloadCount", "0");
+        let items = res.data.data;
+        dispatch(prependFrontPageItems(items));
         dispatch(setFrontPageLoadingState(LoadingState.Loaded));
     }).catch((err) => {
         console.error(err);
@@ -99,7 +130,7 @@ export const updateFrontPageItemsFromPost = (post) => (dispatch, getState) => {
 
 }
 
-export const mergeFrontPageEntry = (entry) => (dispatch, getState) => {
+export const updateFrontPageFromFrontPageEntry = (entry) => (dispatch, getState) => {
 
     let state = getState();
 
