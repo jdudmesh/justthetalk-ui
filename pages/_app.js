@@ -33,7 +33,7 @@ const localTheme = createTheme({
         }
     },
     typography: {
-        fontFamily: ["Verdana", "Helvetica Neue", "Arial", "sans-serif"],
+        fontFamily: ["IBM Plex Sans Arabic", "Verdana", "Helvetica Neue", "Arial", "sans-serif"],
         overline: {
             textTransform: "none",
             fontSize: "1rem",
