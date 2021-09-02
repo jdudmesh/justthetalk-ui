@@ -146,7 +146,7 @@ export function AddPost({discussion, isEditing}) {
             { messageError.length > 0 ? (<div className={styles.messageError}>{messageError}</div>) : (<></>) }
             <div className={styles.postButton}>
                 <div className={styles.postButtonContainer}>
-                    <Button variant="contained" color="primary" onClick={onPostMessage} data-test-id="create-post">Post Reply&#8230;</Button>
+                    <Button variant="contained" color={postAsAdmin ? "secondary" : "primary"} onClick={onPostMessage} data-test-id="create-post">Post Reply&#8230;</Button>
                 </div>
                 <div>
                     {/*
