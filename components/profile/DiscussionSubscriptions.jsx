@@ -63,7 +63,7 @@ export function DiscussionSubscriptions() {
     }, [dispatch]);
 
     const onSelect = (ev) => {
-        setSelectedItems(ev.selectionModel);
+        setSelectedItems(ev);
     }
 
     const onMarkRead = () => {

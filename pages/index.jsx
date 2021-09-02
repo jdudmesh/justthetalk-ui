@@ -196,7 +196,7 @@ export default function Home(props) {
                 return <DiscussionIndexEntry key={ix} discussion={d} folder={folders.find(x => x.id === d.folderId)}></DiscussionIndexEntry>;
             })}
             { unreadsubs.length === 0
-                ? <Alert severity="info" className={styles.userAlert} action={<Button color="primary" size="small" onClick={onSetClickToViewAllSubs}>{`${showReadSubs ? "Hide" : "Show"}`} all</Button>}>You're up to date with all your subscriptions</Alert>
+                ? <Alert severity="info" className={styles.userAlert} action={<Button color="primary" size="small" onClick={onSetClickToViewAllSubs}>{`${showReadSubs ? "Hide" : "Show"}`} all</Button>}>You're up to date!</Alert>
                 : <Button color="primary" variant="outlined" className={styles.userAlert} size="medium" onClick={onSetClickToViewAllSubs}>{`${showReadSubs ? "Hide" : "Show"}`} all subscriptions...</Button>
             }
             { showReadSubs
