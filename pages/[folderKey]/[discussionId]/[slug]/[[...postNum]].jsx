@@ -113,6 +113,8 @@ export default function DiscussionView(props) {
     const [openMoveDiscussionDialog, setOpenMoveDiscussionDialog] = useState(false);
     const [isEditingPost, setIsEditingPost] = useState(false);
     const [debounceTime, setDebounceTime] = useState(0);
+    const [showAddPosts, setShowAddPosts] = useState(false);
+    const [showNewPostsAvailable, setShowNewPostsAvailable] = useState(false);    
 
     const [reportedPost, setReportedPost] = useState(null);
 
@@ -215,6 +217,8 @@ export default function DiscussionView(props) {
             return;
         }
 
+        setShowAddPosts(!editDiscussion && (currentDiscussion.postCount == 0 || (posts.length > 0 && posts[posts.length - 1].postNum >= currentDiscussion.postCount)));
+
         if(currentUser && posts && posts.length > 0) {
             let bookmarkPost = posts[0];
             let lastPost = posts[posts.length - 1];
@@ -273,6 +277,11 @@ export default function DiscussionView(props) {
     }, [currentDiscussion, posts, fetchPostsState]);
 
     useEffect(() => {
+        let hasPendingPosts = pendingDicussionUpdateAvailable && (pendingDicussionUpdateAvailable.postCount - currentDiscussion.postCount > 0);
+        setShowNewPostsAvailable(hasPendingPosts && showAddPosts);
+    }, [pendingDicussionUpdateAvailable, currentDiscussion, showAddPosts]);
+
+    useEffect(() => {
         if(!pagingContainerRef.current) {
             return;
         }
@@ -292,7 +301,7 @@ export default function DiscussionView(props) {
         return () => {
             document.removeEventListener("scroll", l);
         }
-    }, [containerRef.current]);
+    }, [containerRef.current, pagingContainerRef.current]);
 
     const onReportPost = (post) => {
         setReportedPost(post);
@@ -502,10 +511,7 @@ export default function DiscussionView(props) {
         </Paper>
     }
 
-    const renderDiscussion = () => {
-
-        let showAddPosts = !editDiscussion && (currentDiscussion.postCount == 0 || (posts.length > 0 && posts[posts.length - 1].postNum >= currentDiscussion.postCount))
-        let showNewPostsAvailable = pendingDicussionUpdateAvailable && (pendingDicussionUpdateAvailable.postCount - currentDiscussion.postCount > 0) && showAddPosts;
+    const renderDiscussion = () => {        
 
         return <Paper variant="outlined" className="discussionList">
 
