@@ -114,7 +114,7 @@ export default function DiscussionView(props) {
     const [isEditingPost, setIsEditingPost] = useState(false);
     const [debounceTime, setDebounceTime] = useState(0);
     const [showAddPosts, setShowAddPosts] = useState(false);
-    const [showNewPostsAvailable, setShowNewPostsAvailable] = useState(false);    
+    const [showNewPostsAvailable, setShowNewPostsAvailable] = useState(false);
 
     const [reportedPost, setReportedPost] = useState(null);
 
@@ -277,8 +277,9 @@ export default function DiscussionView(props) {
     }, [currentDiscussion, posts, fetchPostsState]);
 
     useEffect(() => {
-        let hasPendingPosts = pendingDicussionUpdateAvailable && (pendingDicussionUpdateAvailable.postCount - currentDiscussion.postCount > 0);
+        let hasPendingPosts = pendingDicussionUpdateAvailable && (pendingDicussionUpdateAvailable.postCount - currentDiscussion.postCount) > 0;
         setShowNewPostsAvailable(hasPendingPosts && showAddPosts);
+        console.log("setShowNewPostsAvailable", hasPendingPosts, showAddPosts)
     }, [pendingDicussionUpdateAvailable, currentDiscussion, showAddPosts]);
 
     useEffect(() => {
@@ -511,7 +512,7 @@ export default function DiscussionView(props) {
         </Paper>
     }
 
-    const renderDiscussion = () => {        
+    const renderDiscussion = () => {
 
         return <Paper variant="outlined" className="discussionList">
 
@@ -542,7 +543,7 @@ export default function DiscussionView(props) {
                     : <></>
                 }
 
-                { showNewPostsAvailable
+                { showNewPostsAvailable && pendingDicussionUpdateAvailable
                     ? <Alert severity="info" className={styles.userAlert} action={<Button color="primary" size="small" onClick={onSetClickToViewNewPosts}>Click to view</Button>}>{`${pendingDicussionUpdateAvailable.postCount - currentDiscussion.postCount} new posts available`}</Alert>
                     : <></>
                 }
