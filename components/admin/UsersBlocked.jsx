@@ -79,7 +79,7 @@ export function UsersBlocked({}) {
     }
 
     const onDelete = () => {
-        console.log(selectedItems);
+
     }
 
     const onSelect = (ev) => {
@@ -109,7 +109,6 @@ export function UsersBlocked({}) {
         </GridToolbarContainer>
     }
 
-    console.log(users);
     return <Paper elevation={0} className={styles.container}>
         <Typography variant="h6" color="textSecondary" size="small" gutterBottom>Users</Typography>
 

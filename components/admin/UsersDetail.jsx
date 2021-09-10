@@ -164,7 +164,6 @@ export function UsersDetail({}) {
       ];
 
     const onActionUser = (field, user) => {
-        console.log(field, user);
         dispatch(toggleUserStatus(field, user));
     }
 
