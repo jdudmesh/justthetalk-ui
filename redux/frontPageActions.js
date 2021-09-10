@@ -225,7 +225,12 @@ export const sortFrontpageItems = (nextItems) => {
 const getNextFrontPageItemsFromBookmark = (bookmark, currentItems) => {
     return currentItems.map( item => {
         if(item.discussionId === bookmark.discussionId) {
-            return { ...item, lastPostReadCount: bookmark.lastPostCount, lastPostReadDate: bookmark.lastPostRead, lastPostReadId: bookmark.lastPostId }
+            return {
+                ...item,
+                lastPostReadCount: bookmark.lastPostCount,
+                lastPostReadDate: bookmark.lastPostRead,
+                lastPostReadId: bookmark.lastPostId
+            }
         } else {
             return item;
         }
@@ -235,7 +240,15 @@ const getNextFrontPageItemsFromBookmark = (bookmark, currentItems) => {
 const getNextFrontPageItemsFromPost = (post, currentItems) => {
     return currentItems.map( item => {
         if(item.discussionId === post.discussionId && post.postNum > item.postCount) {
-            return { ...item, postCount: post.postNum, lastPostDate: post.createdDate, lastPostId: post.Id }
+            return {
+                ...item,
+                postCount: post.postNum,
+                lastPostDate: post.createdDate,
+                lastPostId: post.Id,
+                lastPostReadCount: post.postNum,
+                lastPostReadDate: post.createdDate,
+                lastPostReadId: post.id
+            }
         } else {
             return item;
         }

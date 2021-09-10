@@ -49,6 +49,7 @@ import { fetchUserAPI,
     sendForgotPasswordRequestAPI,
     confirmUserAccountKeyAPI,
     updateCurrentBookmarkAPI,
+    fetchPostsAPI,
 } from "../api";
 
 import {
@@ -67,7 +68,8 @@ import {
     setFolderSubscriptionExceptions,
     setOtherUser,
     setCurrentBookmark,
-    updateUserStateFromFrontPageEntry,
+    setPendingDiscussionUpdate,
+    setMergePendingPosts,
 } from "./userSlice";
 
 import {
@@ -650,3 +652,73 @@ export const setCurrentDiscussionBookmark = (bookmarkedPost) => (dispatch, getSt
 
 }
 
+export const beginMergingPendingPosts = () => async (dispatch, getState) => {
+
+    const state = getState();
+
+    let pendingDiscussionUpdate = state.user.pendingDiscussionUpdate;
+    await dispatch(applyPendingDiscussionUpdate(pendingDiscussionUpdate));
+    await dispatch(setPendingDiscussionUpdate(null));
+
+    dispatch(setMergePendingPosts(true));
+
+}
+
+const updateUserStateFromFrontPageEntry = (entry) => (dispatch, getState) => {
+
+    const state = getState();
+
+    let pendingDiscussionUpdate = {...state.user.currentDiscussion, lastPostDate: entry.lastPostDate, lastPostId: entry.lastPostId, postCount: entry.postCount};
+    if(state.user.mergePendingPosts) {
+        dispatch(applyPendingDiscussionUpdate(pendingDiscussionUpdate))
+    } else {
+        dispatch(setPendingDiscussionUpdate(pendingDiscussionUpdate));
+    }
+
+}
+const applyPendingDiscussionUpdate = (pendingDiscussionUpdate) => async (dispatch, getState) => {
+
+    const state = getState();
+
+    let nextPostNum = 1;
+    if(state.post.items.length > 0) {
+        nextPostNum = state.post.items[state.post.items.length-1].postNum + 1;
+    }
+    let pageSize = pendingDiscussionUpdate.postCount - nextPostNum;
+    let postResults = await fetchPostsAPI(pendingDiscussionUpdate, nextPostNum, pageSize)
+    let posts = postResults.data.data;
+    await dispatch(mergePosts(posts));
+    await dispatch(mergeCurrentDiscussion(pendingDiscussionUpdate));
+
+}
+
+/*
+
+            if(state.mergePendingPosts && state.pendingDiscussionUpdate) {
+                console.debug("merging pending posts");
+                state.currentDiscussion = {
+                    ...state.currentDiscussion,
+                    lastPostDate: state.pendingDiscussionUpdate.lastPostDate,
+                    lastPostId: state.pendingDiscussionUpdate.lastPostId,
+                    postCount: state.pendingDiscussionUpdate.postCount
+                }
+                state.pendingDiscussionUpdate = null;
+            }
+
+
+        updateUserStateFromFrontPageEntry: (state, action) => {
+            let entry = action.payload;
+            if(state.currentDiscussion && state.currentDiscussion.id === entry.discussionId) {
+                let discussionUpdate = {...state.currentDiscussion, lastPostDate: entry.lastPostDate, lastPostId: entry.lastPostId, postCount: entry.postCount}
+                if(state.mergePendingPosts) {
+                    console.debug("updating current discussion");
+                    state.currentDiscussion = discussionUpdate;
+                } else {
+                    console.debug("updating pending discussion");
+                    state.pendingDiscussionUpdate = discussionUpdate;
+                }
+            }
+        }
+
+
+*/

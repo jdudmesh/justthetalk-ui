@@ -97,18 +97,7 @@ const userSlice = createSlice({
             state.pendingDiscussionUpdate = action.payload;
         },
         setMergePendingPosts: (state, action) => {
-            console.debug("setMergePendingPosts", action.payload);
             state.mergePendingPosts = action.payload;
-            if(state.mergePendingPosts && state.pendingDiscussionUpdate) {
-                console.debug("merging pending posts");
-                state.currentDiscussion = {
-                    ...state.currentDiscussion,
-                    lastPostDate: state.pendingDiscussionUpdate.lastPostDate,
-                    lastPostId: state.pendingDiscussionUpdate.lastPostId,
-                    postCount: state.pendingDiscussionUpdate.postCount
-                }
-                state.pendingDiscussionUpdate = null;
-            }
         },
         updateCurrentDiscussionFromLastPost: (state, action) => {
             state.currentDiscussion = { ...state.currentDiscussion, postCount: action.payload.postNum, lastPostId: action.payload.id, lastPostDate: action.payload.createdDate };
@@ -130,19 +119,6 @@ const userSlice = createSlice({
         setCurrentBookmark: (state, action) => {
             state.currentBookmark = action.payload;
         },
-        updateUserStateFromFrontPageEntry: (state, action) => {
-            let entry = action.payload;
-            if(state.currentDiscussion && state.currentDiscussion.id === entry.discussionId) {
-                let discussionUpdate = {...state.currentDiscussion, lastPostDate: entry.lastPostDate, lastPostId: entry.lastPostId, postCount: entry.postCount}
-                if(state.mergePendingPosts) {
-                    console.debug("updating current discussion");
-                    state.currentDiscussion = discussionUpdate;
-                } else {
-                    console.debug("updating pending discussion");
-                    state.pendingDiscussionUpdate = discussionUpdate;
-                }
-            }
-        }
     },
 });
 
@@ -168,7 +144,6 @@ export const {
     setOtherUser,
     updateCurrentDiscussionFromLastPost,
     setCurrentBookmark,
-    updateUserStateFromFrontPageEntry,
 } = userSlice.actions;
 
 export const selectUserLoadingState = state => state.user.loadingState;
@@ -185,6 +160,8 @@ export const selectPendingDiscussionUpdate = state => state.user.pendingDiscussi
 export const selectDiscussionSubscriptions = state => state.user.discussionSubscriptions;
 export const selectFolderSubscriptions = state => state.user.folderSubscriptions;
 export const selectFolderSubscriptionExceptions = state => state.user.folderSubscriptionExceptions;
+
+export const selectMergePendingPosts = state => state.user.mergePendingPosts;
 
 export const selectOtherUser = userId => state => state.user.otherUserCache[userId];
 

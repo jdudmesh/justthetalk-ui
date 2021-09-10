@@ -31,15 +31,9 @@ export const fetchPosts = (discussion, postNum, customPageSize) => (dispatch, ge
     let pageSize = customPageSize ? customPageSize : state.post.pageSize;
 
     fetchPostsAPI(discussion, postNum, pageSize).then((res) => {
-        if(res.status === 200) {
-            let posts = res.data.data;
-            dispatch(mergePosts(posts));
-            dispatch(setPostLoadingState(LoadingState.Loaded));
-        } else {
-            dispatch(setPostLoadingState(LoadingState.Failed));
-            console.error(res);
-            toast.error("Failed to fetch posts");
-        }
+        let posts = res.data.data;
+        dispatch(mergePosts(posts));
+        dispatch(setPostLoadingState(LoadingState.Loaded));
     }).catch((err) => {
         console.error(err);
         toast.error("Failed to fetch posts");
@@ -54,27 +48,21 @@ export const createPost = (discussion, text, postAsAdmin, subscribeToDiscussion)
 
     createPostAPI(discussion, text, postAsAdmin, subscribeToDiscussion)
         .then((res) => {
-            if(res.status === 200) {
-                let state = getState();
-                let posts = res.data.data;
-                let lastPost = posts[posts.length - 1];
-                if(lastPost.postNum > state.user.currentDiscussion.postCount) {
-                    dispatch(mergeCurrentDiscussion({
-                        postCount: lastPost.postNum,
-                        isSubscribed: state.user.currentDiscussion.isSubscribed || state.user.user.autoSubscribe,
-                    }));
-                }
-                dispatch(mergePosts(posts));
-                dispatch(setPostActionError(""));
-                dispatch(setPostActionState(LoadingState.Loaded));
-
-                dispatch(updateFrontPageItemsFromPost(lastPost));
-                dispatch(updateDiscussionItemsFromPost(lastPost));
-
-            } else {
-                dispatch(setPostActionError("Failed to save comment"));
-                dispatch(setPostActionState(LoadingState.Failed));
+            let state = getState();
+            let posts = res.data.data;
+            let lastPost = posts[posts.length - 1];
+            if(lastPost.postNum > state.user.currentDiscussion.postCount) {
+                dispatch(mergeCurrentDiscussion({
+                    postCount: lastPost.postNum,
+                    isSubscribed: state.user.currentDiscussion.isSubscribed || state.user.user.autoSubscribe,
+                }));
             }
+            dispatch(mergePosts(posts));
+            dispatch(setPostActionError(""));
+            dispatch(setPostActionState(LoadingState.Loaded));
+
+            dispatch(updateFrontPageItemsFromPost(lastPost));
+            dispatch(updateDiscussionItemsFromPost(lastPost));
         }).catch((err) => {
             console.error(err);
             if(err.response) {
@@ -92,15 +80,10 @@ export const editPost = (discussion, post) => (dispatch) => {
     dispatch(setPostActionState(LoadingState.Loading));
 
     editPostAPI(discussion, post).then((res) => {
-        if(res.status === 200) {
-            let post = res.data.data;
-            dispatch(mergePosts([post]));
-            dispatch(setPostActionError(""));
-            dispatch(setPostActionState(LoadingState.Loaded));
-        } else {
-            dispatch(setPostActionError("Failed to save comment"));
-            dispatch(setPostActionState(LoadingState.Failed));
-        }
+        let post = res.data.data;
+        dispatch(mergePosts([post]));
+        dispatch(setPostActionError(""));
+        dispatch(setPostActionState(LoadingState.Loaded));
     }).catch((err) => {
         console.error(err);
         dispatch(setPostActionError(err.response.data.message));
@@ -114,15 +97,10 @@ export const deletePost =(discussion, post) => (dispatch, getState) => {
     dispatch(setPostActionState(LoadingState.Loading));
 
     deletePostAPI(discussion, post).then((res) => {
-        if(res.status === 200) {
-            let post = res.data.data;
-            dispatch(mergePosts([post]));
-            dispatch(setPostActionError(""));
-            dispatch(setPostActionState(LoadingState.Loaded));
-        } else {
-            dispatch(setPostActionError("Failed to delete comment"));
-            dispatch(setPostActionState(LoadingState.Failed));
-        }
+        let post = res.data.data;
+        dispatch(mergePosts([post]));
+        dispatch(setPostActionError(""));
+        dispatch(setPostActionState(LoadingState.Loaded));
     }).catch((err) => {
         console.error(err);
         dispatch(setPostActionError(err.response.data.message));

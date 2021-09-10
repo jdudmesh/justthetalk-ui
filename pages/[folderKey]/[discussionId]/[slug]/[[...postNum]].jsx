@@ -57,6 +57,7 @@ import {
     setDiscussionSubscriptionStatus,
     setDiscussionUnread,
     setCurrentDiscussionBookmark,
+    beginMergingPendingPosts,
 } from "../../../../redux/userActions";
 
 import { selectFolders } from "../../../../redux/folderSlice";
@@ -108,7 +109,7 @@ export default function DiscussionView(props) {
 
     const { folderKey, discussionId, postNum } = router.query;
 
-    const [editDiscussion, setEditDiscussion] = useState();
+    const [editDiscussion, setEditDiscussion] = useState(false);
     const [openDeleteDiscussionDialog, setOpenDeleteDiscussionDialog] = useState(false);
     const [openMoveDiscussionDialog, setOpenMoveDiscussionDialog] = useState(false);
     const [isEditingPost, setIsEditingPost] = useState(false);
@@ -217,8 +218,6 @@ export default function DiscussionView(props) {
             return;
         }
 
-        setShowAddPosts(!editDiscussion && (currentDiscussion.postCount == 0 || (posts.length > 0 && posts[posts.length - 1].postNum >= currentDiscussion.postCount)));
-
         if(currentUser && posts && posts.length > 0) {
             let bookmarkPost = posts[0];
             let lastPost = posts[posts.length - 1];
@@ -226,6 +225,13 @@ export default function DiscussionView(props) {
                 bookmarkPost = lastPost;
             }
             dispatch(setCurrentDiscussionBookmark(bookmarkPost));
+        }
+
+        let shouldShowAddPosts = !editDiscussion && (currentDiscussion.postCount == 0 || (posts.length > 0 && posts[posts.length - 1].postNum >= currentDiscussion.postCount));
+        setShowAddPosts(shouldShowAddPosts);
+
+        if(shouldShowAddPosts) {
+            return
         }
 
         if("undefined" === typeof IntersectionObserver) {
@@ -279,7 +285,6 @@ export default function DiscussionView(props) {
     useEffect(() => {
         let hasPendingPosts = pendingDicussionUpdateAvailable && (pendingDicussionUpdateAvailable.postCount - currentDiscussion.postCount) > 0;
         setShowNewPostsAvailable(hasPendingPosts && showAddPosts);
-        console.log("setShowNewPostsAvailable", hasPendingPosts, showAddPosts)
     }, [pendingDicussionUpdateAvailable, currentDiscussion, showAddPosts]);
 
     useEffect(() => {
@@ -396,7 +401,7 @@ export default function DiscussionView(props) {
     }
 
     const onSetClickToViewNewPosts = () => {
-        dispatch(setMergePendingPosts(true));
+        dispatch(beginMergingPendingPosts());
     }
 
     const onClickAdminMenu = (key) => {
