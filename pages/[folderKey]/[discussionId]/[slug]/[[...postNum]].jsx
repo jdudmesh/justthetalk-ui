@@ -283,11 +283,18 @@ export default function DiscussionView(props) {
     }, [currentDiscussion, posts, fetchPostsState]);
 
     useEffect(() => {
+        
         if(!(pendingDicussionUpdateAvailable && currentDiscussion)) {
             return;
         }
+        
+        if(pendingDicussionUpdateAvailable.discussionId != currentDiscussion.id) {
+            return
+        }
+
         let hasPendingPosts = (pendingDicussionUpdateAvailable.postCount - currentDiscussion.postCount) > 0;
         setShowNewPostsAvailable(hasPendingPosts && showAddPosts);
+        
     }, [pendingDicussionUpdateAvailable, currentDiscussion, showAddPosts]);
 
     useEffect(() => {
