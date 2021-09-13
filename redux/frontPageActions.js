@@ -165,12 +165,10 @@ export const sortFrontpageSubscription = (nextSubs, state) => {
     switch(state.user.user.subscriptionFetchOrder) {
         case 0: // oldest first
             nextSubs.sort((a, b) => {
-                let d1 = new Date(a.lastPostDate).getTime();
-                let d2 = new Date(b.lastPostDate).getTime();
-                if(d1 > d2) {
+                if(a.lastPostId > b.lastPostId) {
                     return 1;
                 }
-                if(d1 < d2) {
+                if(a.lastPostId < b.lastPostId) {
                     return -1;
                 }
                 return 0;
@@ -178,12 +176,10 @@ export const sortFrontpageSubscription = (nextSubs, state) => {
             break;
         case 1: // newest first
         nextSubs.sort((a, b) => {
-            let d1 = new Date(a.lastPostDate).getTime();
-            let d2 = new Date(b.lastPostDate).getTime();
-            if(d1 > d2) {
+            if(a.lastPostId > b.lastPostId) {
                 return -1;
             }
-            if(d1 < d2) {
+            if(a.lastPostId < b.lastPostId) {
                 return 1;
             }
             return 0;
