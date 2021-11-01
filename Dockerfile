@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-FROM node:alpine
+FROM node:lts-alpine
 
 # create & set working directory
 RUN mkdir -p /usr/src
