@@ -21,6 +21,7 @@ import { fetchDiscussionsBeforeAPI, createDiscussionAPI, editDiscussionAPI, dele
 
 import { appendDiscussions, setDiscussionLoadingState, setDiscussionActionState, setDiscussionActionError, setLastLoadCount } from './discussionSlice'
 import { setCurrentDiscussion } from './userSlice';
+import { updateDiscussionFrontPageEntry } from "./frontPageActions";
 
 export const fetchDiscussions = (folder, beforeDate) => (dispatch, getState) => {
 
@@ -52,6 +53,7 @@ export const createDiscussion = (folder, title, header, subscribed) => (dispatch
 
     createDiscussionAPI(folder, title, header, subscribed).then((res) => {
         let discussion = res.data.data;
+        dispatch(updateDiscussionFrontPageEntry(discussion));
         dispatch(setCurrentDiscussion(discussion));
         dispatch(setDiscussionActionError(""));
         dispatch(setDiscussionActionState(LoadingState.Loaded));
@@ -71,6 +73,7 @@ export const editDiscussion = (discussion, title, header) => (dispatch, getState
 
     editDiscussionAPI(discussion, title, header).then((res) => {
         let discussion = res.data.data;
+        dispatch(updateDiscussionFrontPageEntry(discussion));
         dispatch(setCurrentDiscussion(discussion));
         dispatch(setDiscussionActionError(""));
         dispatch(setDiscussionActionState(LoadingState.Loaded));
@@ -87,7 +90,9 @@ export const deleteDiscussion = (discussion, mutateState) => (dispatch) => {
     dispatch(setDiscussionActionState(LoadingState.Loading));
 
     deleteDiscussionAPI(discussion, mutateState).then((res) => {
-        dispatch(setCurrentDiscussion(res.data.data));
+        let discussion = res.data.data;
+        dispatch(updateDiscussionFrontPageEntry(discussion));
+        dispatch(setCurrentDiscussion(discussion));
         dispatch(setDiscussionActionState(LoadingState.Loaded));
     }).catch((err) => {
         console.error(err);

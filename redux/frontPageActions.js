@@ -29,20 +29,20 @@ import {
     setLastLoadCount,
 } from './frontPageSlice';
 
-export const fetchFrontPage = (viewType, beforeDate) => (dispatch, getState) => {
+export const fetchFrontPage = (viewType) => (dispatch, getState) => {
 
     let state = getState();
 
     dispatch(setFrontPageLoadingState(LoadingState.Loading));
 
-    beforeDate = beforeDate || new Date().toISOString();
+    let beforeDate = new Date().toISOString();
     const size = 50;
 
     fetchFrontPageBeforeAPI(viewType, beforeDate, size).then((res) => {
         localStorage.setItem("reloadCount", "0");
         let items = res.data.data;
         dispatch(setLastLoadCount(items.length));
-        dispatch(appendFrontPageItems(items));
+        dispatch(setFrontPageItems(items));
         dispatch(setFrontPageLoadingState(LoadingState.Loaded));
     }).catch((err) => {
         console.error(err);
@@ -54,6 +54,28 @@ export const fetchFrontPage = (viewType, beforeDate) => (dispatch, getState) => 
             toast.error("Failed to fetch front page");
             dispatch(setFrontPageLoadingState(LoadingState.Failed));
         }
+    });
+
+}
+
+export const fetchFrontPageBefore = (viewType, beforeDate) => (dispatch, getState) => {
+
+    let state = getState();
+
+    dispatch(setFrontPageLoadingState(LoadingState.Loading));
+
+    beforeDate = beforeDate || new Date().toISOString();
+    const size = 50;
+
+    fetchFrontPageBeforeAPI(viewType, beforeDate, size).then((res) => {
+        localStorage.setItem("reloadCount", "0");
+        let items = res.data.data;
+        dispatch(appendFrontPageItems(items));
+        dispatch(setFrontPageLoadingState(LoadingState.Loaded));
+    }).catch((err) => {
+        console.error(err);
+        toast.error("Failed to fetch front page");
+        dispatch(setFrontPageLoadingState(LoadingState.Failed));
     });
 
 }
@@ -113,6 +135,49 @@ export const updateFrontPageItemsFromBookmark = (bookmark) => (dispatch, getStat
     let nextSubs = [...getNextFrontPageItemsFromBookmark(bookmark, state.frontPage.frontpageSubscriptions)];
     sortFrontpageSubscription(nextSubs, state);
     dispatch(setFrontpageSubscriptions(nextSubs));
+
+}
+
+
+export const updateDiscussionFrontPageEntry = (discussion) => (dispatch, getState) => {
+
+    let state = getState();
+
+    let nextItems = [];
+
+    let exists = state.frontPage.items.some(x => x.discussionId == discussion.id);
+    if(exists) {
+        if(discussion.status !== 0) {
+            nextItems = state.frontPage.items.filter(x => x.discussionId == discussion.id);
+        } else {
+            nextItems = state.frontPage.items.map(x => {
+                if(x.id == discussion.id) {
+                    return { ...x, title: discussion.title, header: discussion.header };
+                }
+                return x;
+            })
+        }
+    } else {
+        let folder = state.folder.items.find(x => x.id == discussion.folderId);
+        let newEntry = {
+            discussionId: discussion.id,
+            discussionTitle: discussion.title,
+            folderId: folder.title,
+            folderKey: folder.key,
+            folderTitle: folder.title,
+            lastPostId: null,
+            lastPostDate: discussion.createdDate,
+            postCount: discussion.postCount,
+            lastPostReadCount: 0,
+            lastPostReadDate: null,
+            lastPostReadId: 0,
+            url: discussion.url
+        };
+        nextItems = [newEntry, ...state.frontPage.items];
+    }
+
+    dispatch(setFrontPageItems(nextItems));
+
 
 }
 

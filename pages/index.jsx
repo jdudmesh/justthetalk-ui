@@ -48,7 +48,7 @@ import { toast } from "react-toastify";
 import styles from '../styles/Home.module.scss'
 
 import { selectFrontPageLoadingState, selectFrontPageItems, clearFrontPageItems, selectFrontPageMaxPages, selectFrontpageSubscriptions, selectLastLoadCount } from '../redux/frontPageSlice'
-import { fetchFrontPage, fetchFrontPageSince, fetchFrontPageSubscriptions } from '../redux/frontPageActions'
+import { fetchFrontPage, fetchFrontPageBefore, fetchFrontPageSince, fetchFrontPageSubscriptions } from '../redux/frontPageActions'
 import { selectFolders } from '../redux/folderSlice'
 
 import { selectUser, selectUserViewType, selectUserLoadingState } from '../redux/userSlice'
@@ -113,7 +113,7 @@ export default function Home(props) {
                 let entry = entries[i];
                 if(entry.intersectionRatio > 0 && discussions.length > 0 && lastLoadCount > 0) {
                     let lastEntry = discussions[discussions.length - 1];
-                    dispatch(fetchFrontPage(viewType, lastEntry.lastPostDate));
+                    dispatch(fetchFrontPageBefore(viewType, lastEntry.lastPostDate));
                     break;
                 }
             }
