@@ -47,6 +47,7 @@ import { LoadingState } from "../redux/constants";
 import { PageTop } from "../components/PageTop";
 import { LoginButtons } from "../components/LoginButtons";
 import { SearchBar } from "../components/SearchBar";
+import { Alert } from "../components/Alert";
 
 import styles from "../styles/MasterLayout.module.scss";
 
@@ -127,8 +128,9 @@ export default function MasterLayout({title, leftContent, children}) {
         </div>
     }
 
-    return <>
+    return <>        
         <PageTop title={title} onShowFolderView={onShowFolderView}></PageTop>
+        <Alert severity="warning">Please read <a href="/userspace/52701/the-future-of-justthetalk">this thread about the future of the site</a></Alert>
 
         { isNarrowWindow
             ?  <Drawer anchor="right" open={drawOpenState} onClose={() => setDrawOpenState(false)}>
