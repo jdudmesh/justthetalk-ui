@@ -53,18 +53,6 @@ function MyApp({ Component, pageProps }) {
         <ThemeProvider theme={localTheme}>
             <Head>
                 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes" />
-                
-                <script async src="https://www.googletagmanager.com/gtag/js?id=UA-47267190-1"></script>
-                <script
-                    dangerouslySetInnerHTML={{
-                    __html: `
-                    window.dataLayer = window.dataLayer || [];
-                    function gtag(){dataLayer.push(arguments);}
-                    gtag('js', new Date());
-                    gtag('config', 'UA-47267190-1');
-                    `,
-                    }}
-                />
             </Head>
 
             <Component {...pageProps} />
