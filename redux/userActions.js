@@ -565,7 +565,7 @@ export const validatePasswordResetKey = (key) => (dispatch) => {
 
     dispatch(setUserLoadingState(LoadingState.Loading));
 
-    validatePasswordResetKeyAPI(credentials)
+    validatePasswordResetKeyAPI(key)
         .then(handleUserDetailsSuccess(dispatch))
         .catch(handleUserDetailsFailure(dispatch));
 
