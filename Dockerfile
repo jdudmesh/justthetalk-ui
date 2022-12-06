@@ -25,6 +25,8 @@ COPY . /usr/src
 # install dependencies
 RUN npm install
 
+ENV PLATFORM=PRODUCTION
+
 # start app
 RUN npm run build
 EXPOSE 3000

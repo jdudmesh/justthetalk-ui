@@ -18,6 +18,6 @@ module.exports = {
 
     },
     publicRuntimeConfig: {
-
+        environment: process.env.PLATFORM || "DEV",
     }
 }

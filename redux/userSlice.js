@@ -37,6 +37,7 @@ const userSlice = createSlice({
 
         pendingDiscussionUpdate: null,
         mergePendingPosts: false,
+        passwordResetKeyValid: false,
 
         otherUserCache: {},
 
@@ -119,6 +120,13 @@ const userSlice = createSlice({
         setCurrentBookmark: (state, action) => {
             state.currentBookmark = action.payload;
         },
+        setPasswordResetKeyValid: (state, action) => {
+            state.actionError = ""
+            state.passwordResetKeyValid = action.payload;
+            if(!state.passwordResetKeyValid) {
+                state.actionError = "The reset key not valid. It may have expired. Please try again."
+            }
+        },
     },
 });
 
@@ -144,6 +152,7 @@ export const {
     setOtherUser,
     updateCurrentDiscussionFromLastPost,
     setCurrentBookmark,
+    setPasswordResetKeyValid,
 } = userSlice.actions;
 
 export const selectUserLoadingState = state => state.user.loadingState;
@@ -164,5 +173,6 @@ export const selectFolderSubscriptionExceptions = state => state.user.folderSubs
 export const selectMergePendingPosts = state => state.user.mergePendingPosts;
 
 export const selectOtherUser = userId => state => state.user.otherUserCache[userId];
+export const selectPasswordResetKeyValid = state => state.user.passwordResetKeyValid;
 
 export default userSlice.reducer

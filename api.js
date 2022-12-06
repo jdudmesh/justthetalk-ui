@@ -105,9 +105,9 @@ export const validatePasswordResetKeyAPI = (key) => {
     return new Promise(async (resolve, reject) => {
         let response = await Api.Get(`/user/password/validatekey?key=${key}`).catch(reject);
         if(response) {
-            accessToken = response.data.data.accessToken;
-            initiateAccessTokenRefreshTimer();
-            resolve(response.data.data.user);
+            resolve();
+        } else {
+            reject();
         }
     });
 }
@@ -210,6 +210,8 @@ export const deleteUserFolderSubsAPI = (subs) => Api.Delete(`/user/subscriptions
 export const fetchDiscussionSubscriptionsAPI = () => Api.Get(`/user/subscriptions/discussion`);
 export const deleteUserDiscussionSubsAPI = (subs) => Api.Delete(`/user/subscriptions/discussion`, subs);
 export const updateUserPasswordAPI = (credentials) => Api.Put(`/user/password`, credentials);
+export const updateUserPasswordFromKeyAPI = (credentials) => Api.Put(`/user/password/fromkey`, credentials);
+
 export const fetchIgnoredUsersAPI = () => Api.Get(`/user/ignore/list`);
 export const fetchFolderSubscriptionsAPI = () => Api.Get(`/user/subscriptions/folder`);
 export const fetchFolderSubscriptionExceptionsAPI = () => Api.Get(`/user/subscriptions/folder/exceptions`);
@@ -254,11 +256,11 @@ export const openWebsocketAPI = (eventListener) => {
 
         switch(event.data) {
         case "ping!":
-            console.debug("got ping", new Date());
+            // console.debug("got ping", new Date());
             event.target.send("pong!");
             break;
         case "pong!":
-            console.debug("got pong");
+            // console.debug("got pong");
             break;
         case "ack!":
             console.info("websocket connected");

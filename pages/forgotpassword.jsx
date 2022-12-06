@@ -14,6 +14,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { useEffect, useState, useRef } from "react";
+import getConfig from "next/config";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -38,7 +39,7 @@ const EmailRe = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]
 export default function ForgotPassword() {
 
     const dispatch = useDispatch();
-
+    const { publicRuntimeConfig } = getConfig();
     const actionState = useSelector(selectUserActionState);
 
     const [email, setEmail] = useState("");
@@ -81,7 +82,7 @@ export default function ForgotPassword() {
             valid = false;
         }
 
-        if(recaptchaResponse.length === 0) {
+        if(recaptchaResponse.length === 0 && publicRuntimeConfig.environment == "PRODUCTION") {
             setErrorText("You must tick the 'I am not a robot' box");
             setErrorState("error");
             valid = false;

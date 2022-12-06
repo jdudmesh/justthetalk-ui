@@ -27,6 +27,7 @@ import { fetchUserAPI,
     loginUserAPI,
     logoutUserAPI,
     updateUserPasswordAPI,
+    updateUserPasswordFromKeyAPI,
     validatePasswordResetKeyAPI,
     ignoreUserAPI,
     setFolderSubscriptionStatusAPI,
@@ -70,6 +71,7 @@ import {
     setCurrentBookmark,
     setPendingDiscussionUpdate,
     setMergePendingPosts,
+    setPasswordResetKeyValid,
 } from "./userSlice";
 
 import {
@@ -358,6 +360,21 @@ export const updateUserPassword = (credentials) => (dispatch) => {
     });
 
 }
+export const updateUserPasswordFromKey = (credentials) => (dispatch) => {
+
+    dispatch(setUserActionState(LoadingState.Loading));
+
+    updateUserPasswordFromKeyAPI(credentials).then((res) => {
+        dispatch(setUser(res.data.data.user))
+        dispatch(setUserActionState(LoadingState.Loaded));
+        toast.success("Password updated");
+    }).catch((err) => {
+        dispatch(setUser(null))
+        dispatch(setUserActionState(LoadingState.Failed));
+        dispatch(setActionError(err.response.data.message));
+    });
+
+}
 
 export const setDiscussionUnread = (discussion) => (dispatch) => {
 
@@ -566,8 +583,13 @@ export const validatePasswordResetKey = (key) => (dispatch) => {
     dispatch(setUserLoadingState(LoadingState.Loading));
 
     validatePasswordResetKeyAPI(key)
-        .then(handleUserDetailsSuccess(dispatch))
-        .catch(handleUserDetailsFailure(dispatch));
+        .then(() => dispatch(setPasswordResetKeyValid(true)))
+        .catch((res) => {
+            if(res.response.status === 406) {
+                toast.error("The password reset request has expired. Please try again.");
+            }
+            dispatch(setPasswordResetKeyValid(false))
+        });
 
 }
 
