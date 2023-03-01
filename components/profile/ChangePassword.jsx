@@ -91,6 +91,12 @@ export function ChangePassword() {
             valid = false;
         }
 
+        if (recaptchaResponse.length === 0 && publicRuntimeConfig.environment == "PRODUCTION") {
+            setErrorText("You must tick the 'I am not a robot' box");
+            setErrorState("error");
+            valid = false;
+        }
+
         if (valid) {
             dispatch(updateUserPassword({ oldPassword, newPassword, recaptchaResponse }))
         }
