@@ -19,6 +19,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { FormControl, TextField, Button, Paper, Typography } from "@material-ui/core";
+import getConfig from "next/config";
 import ReCAPTCHA from "react-google-recaptcha";
 
 import { updateUserPassword } from "../../redux/userActions";
@@ -34,6 +35,7 @@ export function ChangePassword() {
 
     const dispatch = useDispatch();
 
+    const { publicRuntimeConfig } = getConfig();
     const currentUser = useSelector(selectUser);
     const actionState = useSelector(selectUserActionState);
     const actionError = useSelector(selectUserActionError);
